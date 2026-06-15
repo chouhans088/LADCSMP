@@ -1,0 +1,1597 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MP Legal Aid Defence Counsel Directory</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@300;400;600;700&family=DM+Serif+Display&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0b1120;
+  --surface: #111827;
+  --card: #1a2235;
+  --border: #1e2d45;
+  --accent: #3b82f6;
+  --accent2: #06b6d4;
+  --gold: #f59e0b;
+  --text: #e2e8f0;
+  --muted: #64748b;
+  --chief: #f59e0b;
+  --deputy: #3b82f6;
+  --assistant: #10b981;
+  --highlight: #1e3a5f;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Noto Sans Devanagari', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Grid bg */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: 
+    linear-gradient(rgba(59,130,246,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(59,130,246,0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 32px 20px;
+  position: relative;
+  z-index: 1;
+}
+
+/* Header */
+.header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.header .badge {
+  display: inline-block;
+  background: linear-gradient(135deg, rgba(59,130,246,0.15), rgba(6,182,212,0.1));
+  border: 1px solid rgba(59,130,246,0.3);
+  color: var(--accent2);
+  font-size: 11px;
+  letter-spacing: 3px;
+  padding: 5px 16px;
+  border-radius: 20px;
+  margin-bottom: 14px;
+  text-transform: uppercase;
+}
+
+.header h1 {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(22px, 5vw, 36px);
+  background: linear-gradient(135deg, #e2e8f0, #3b82f6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1.2;
+  margin-bottom: 8px;
+}
+
+.header .subtitle {
+  color: var(--muted);
+  font-size: 13px;
+  letter-spacing: 0.5px;
+}
+
+/* Stats bar */
+.stats-bar {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-bottom: 32px;
+  flex-wrap: wrap;
+}
+
+.stat-chip {
+  background: var(--card);
+  border: 1px solid var(--border);
+  padding: 8px 18px;
+  border-radius: 8px;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.stat-chip .num {
+  font-family: 'DM Mono', monospace;
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--accent);
+}
+
+/* Search box */
+.search-section {
+  position: relative;
+  margin-bottom: 28px;
+}
+
+.search-icon {
+  position: absolute;
+  left: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--muted);
+  font-size: 18px;
+  pointer-events: none;
+  z-index: 2;
+}
+
+#searchInput {
+  width: 100%;
+  padding: 16px 20px 16px 50px;
+  background: var(--card);
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  color: var(--text);
+  font-family: 'Noto Sans Devanagari', sans-serif;
+  font-size: 16px;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+#searchInput:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(59,130,246,0.15);
+}
+
+#searchInput::placeholder { color: var(--muted); }
+
+/* Dropdown */
+.dropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0; right: 0;
+  background: var(--card);
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  max-height: 280px;
+  overflow-y: auto;
+  z-index: 100;
+  display: none;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+}
+
+.dropdown.open { display: block; }
+
+.dropdown-item {
+  padding: 12px 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: background 0.15s;
+  border-bottom: 1px solid var(--border);
+}
+
+.dropdown-item:last-child { border-bottom: none; }
+.dropdown-item:hover { background: var(--highlight); }
+.dropdown-item:first-child { border-radius: 12px 12px 0 0; }
+.dropdown-item:last-child { border-radius: 0 0 12px 12px; }
+
+.dropdown-item .d-name { font-weight: 600; font-size: 14px; }
+.dropdown-item .d-count {
+  background: rgba(59,130,246,0.15);
+  color: var(--accent);
+  font-size: 11px;
+  padding: 2px 9px;
+  border-radius: 12px;
+  font-family: 'DM Mono', monospace;
+}
+
+.dropdown::-webkit-scrollbar { width: 6px; }
+.dropdown::-webkit-scrollbar-track { background: transparent; }
+.dropdown::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+/* District result panel */
+#districtPanel {
+  display: none;
+  animation: slideUp 0.3s ease;
+}
+
+#districtPanel.show { display: block; }
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.district-header {
+  background: linear-gradient(135deg, var(--card), var(--highlight));
+  border: 1px solid var(--accent);
+  border-radius: 14px;
+  padding: 24px 28px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.district-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 26px;
+  color: var(--text);
+}
+
+.district-meta {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.meta-pill {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.meta-pill.total { background: rgba(59,130,246,0.15); color: var(--accent); border: 1px solid rgba(59,130,246,0.3); }
+.meta-pill.chief-pill { background: rgba(245,158,11,0.12); color: var(--chief); border: 1px solid rgba(245,158,11,0.3); }
+.meta-pill.deputy-pill { background: rgba(59,130,246,0.12); color: var(--deputy); border: 1px solid rgba(59,130,246,0.3); }
+.meta-pill.asst-pill { background: rgba(16,185,129,0.12); color: var(--assistant); border: 1px solid rgba(16,185,129,0.3); }
+
+/* Counsel cards */
+.counsel-grid {
+  display: grid;
+  gap: 14px;
+}
+
+.counsel-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px 22px;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 16px;
+  align-items: start;
+  transition: border-color 0.2s, transform 0.15s;
+  position: relative;
+  overflow: hidden;
+}
+
+.counsel-card::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 4px;
+}
+
+.counsel-card.chief::before { background: var(--chief); }
+.counsel-card.deputy::before { background: var(--deputy); }
+.counsel-card.assistant::before { background: var(--assistant); }
+
+.counsel-card:hover {
+  border-color: rgba(59,130,246,0.4);
+  transform: translateY(-1px);
+}
+
+.sr-badge {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'DM Mono', monospace;
+  font-size: 14px;
+  font-weight: 500;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.chief .sr-badge { background: rgba(245,158,11,0.15); color: var(--chief); }
+.deputy .sr-badge { background: rgba(59,130,246,0.15); color: var(--deputy); }
+.assistant .sr-badge { background: rgba(16,185,129,0.15); color: var(--assistant); }
+
+.counsel-info { min-width: 0; }
+
+.counsel-name {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.counsel-contact {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 8px;
+}
+
+.contact-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.contact-item .icon { font-size: 14px; flex-shrink: 0; }
+.contact-item a { color: var(--accent2); text-decoration: none; }
+.contact-item a:hover { text-decoration: underline; }
+
+.contact-item .mono {
+  font-family: 'DM Mono', monospace;
+  font-size: 13px;
+  color: var(--text);
+  opacity: 0.85;
+}
+
+.desig-badge {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.chief .desig-badge { background: rgba(245,158,11,0.12); color: var(--chief); border: 1px solid rgba(245,158,11,0.25); }
+.deputy .desig-badge { background: rgba(59,130,246,0.12); color: var(--deputy); border: 1px solid rgba(59,130,246,0.25); }
+.assistant .desig-badge { background: rgba(16,185,129,0.12); color: var(--assistant); border: 1px solid rgba(16,185,129,0.25); }
+
+.date-label {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 5px;
+  font-family: 'DM Mono', monospace;
+}
+
+/* Empty state */
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--muted);
+}
+
+.empty-state .icon { font-size: 48px; margin-bottom: 16px; opacity: 0.5; }
+.empty-state p { font-size: 15px; }
+
+/* Footer */
+.footer {
+  text-align: center;
+  margin-top: 48px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.8;
+}
+
+@media (max-width: 600px) {
+  .counsel-card {
+    grid-template-columns: auto 1fr;
+  }
+  .desig-badge { display: none; }
+  .counsel-card::after {
+    content: attr(data-desig);
+    position: absolute;
+    top: 12px; right: 14px;
+    font-size: 10px;
+    color: var(--muted);
+  }
+}
+
+/* ===== Court Fee Calculator (embedded) ===== */
+.cf-wrap {
+  display: none;
+  margin-top: 20px;
+  margin-bottom: 28px;
+  background: linear-gradient(160deg, #1c1408 0%, #2a1f0a 60%, #150f05 100%);
+  border: 1px solid rgba(201,168,76,0.35);
+  border-radius: 18px;
+  padding: 22px 18px;
+  font-family: 'Noto Sans Devanagari', sans-serif;
+  color: #e8d5a3;
+}
+.cf-wrap.show { display: block; animation: fadeInUp 0.3s ease; }
+.cf-header { text-align: center; margin-bottom: 20px; }
+.cf-badge {
+  display: inline-block; border: 1.5px solid #c9a84c;
+  padding: 4px 20px; margin-bottom: 10px; letter-spacing: 3px;
+  font-size: 10px; color: #c9a84c; text-transform: uppercase; border-radius: 20px;
+}
+.cf-header h2 { font-size: clamp(18px,4.5vw,26px); color: #f0e0a0; margin-bottom: 4px; font-family: 'DM Serif Display', serif; }
+.cf-header p { font-size: 12px; color: #9a8866; }
+.cf-card {
+  background: rgba(255,255,255,0.04); border: 1px solid rgba(201,168,76,0.3);
+  border-radius: 16px; padding: 18px; margin-bottom: 14px;
+}
+.cf-input-label { font-size: 11px; color: #c9a84c; letter-spacing: 1px; display: block; margin-bottom: 10px; }
+.cf-input-wrap { display: flex; align-items: center; gap: 10px; }
+.cf-rupee { font-size: 22px; color: #c9a84c; font-weight: bold; }
+.cf-card input[type=number] {
+  flex: 1; background: rgba(0,0,0,0.4); border: 1.5px solid rgba(201,168,76,0.4);
+  border-radius: 10px; padding: 13px 14px; font-size: 20px; color: #f0e0a0;
+  outline: none; font-family: 'DM Mono', monospace; width: 100%; -moz-appearance: textfield;
+}
+.cf-card input::-webkit-outer-spin-button, .cf-card input::-webkit-inner-spin-button { -webkit-appearance: none; }
+.cf-card input:focus { border-color: #c9a84c; }
+.cf-amount-text { font-size: 11px; color: #9a8866; margin-top: 8px; }
+.cf-result-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0; margin-bottom: 18px; }
+.cf-result-item { text-align: center; padding: 4px 8px; }
+.cf-result-item + .cf-result-item { border-left: 1px solid rgba(201,168,76,0.2); }
+.cf-result-label { font-size: 10px; color: #9a8866; margin-bottom: 5px; letter-spacing: 0.5px; }
+.cf-result-value { font-size: clamp(15px,3.5vw,22px); font-weight: 700; }
+.cf-result-sub { font-size: 9px; color: #9a8866; margin-top: 3px; }
+.cf-v-gold { color: #f0e0a0; } .cf-v-yellow { color: #c9a84c; } .cf-v-tan { color: #e8c87a; }
+.cf-bar-wrap { margin-bottom: 16px; }
+.cf-bar-header { display: flex; justify-content: space-between; font-size: 11px; color: #9a8866; margin-bottom: 5px; }
+.cf-bar-track { background: rgba(0,0,0,0.4); border-radius: 4px; height: 7px; overflow: hidden; }
+.cf-bar-fill { height: 100%; background: linear-gradient(90deg, #c9a84c, #f0e0a0); border-radius: 4px; transition: width 0.5s ease; }
+.cf-breakdown { background: rgba(0,0,0,0.3); border-radius: 10px; padding: 12px 14px; font-size: 13px; }
+.cf-brow { display: flex; justify-content: space-between; align-items: center; padding: 4px 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
+.cf-brow:last-child { border-bottom: none; }
+.cf-brow-label { color: #9a8866; font-size: 12px; }
+.cf-brow-val { font-family: 'DM Mono', monospace; font-size: 13px; }
+.cf-cap-notice { margin-top: 10px; padding: 8px 12px; background: rgba(201,168,76,0.1); border: 1px solid rgba(201,168,76,0.3); border-radius: 8px; font-size: 11px; color: #c9a84c; }
+.cf-quick-label { text-align: center; font-size: 11px; color: #7a6a50; letter-spacing: 1px; margin-bottom: 10px; }
+.cf-quick-grid { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+.cf-quick-btn { background: rgba(255,255,255,0.04); border: 1px solid rgba(201,168,76,0.2); color: #9a8866; padding: 6px 14px; border-radius: 20px; cursor: pointer; font-size: 12px; font-family: 'DM Mono', monospace; transition: all 0.2s; }
+.cf-quick-btn.active, .cf-quick-btn:active { background: rgba(201,168,76,0.2); border-color: #c9a84c; color: #c9a84c; }
+.cf-toggle-btn { display: block; width: 100%; background: rgba(201,168,76,0.06); border: 1px solid rgba(201,168,76,0.3); color: #c9a84c; padding: 13px; border-radius: 12px; cursor: pointer; font-size: 13px; font-family: 'Noto Sans Devanagari', sans-serif; margin-bottom: 12px; }
+.cf-table-wrap { overflow-x: auto; background: rgba(0,0,0,0.25); border: 1px solid rgba(201,168,76,0.15); border-radius: 12px; -webkit-overflow-scrolling: touch; }
+.cf-table-wrap table { width: 100%; border-collapse: collapse; font-size: 12px; min-width: 320px; }
+.cf-table-wrap thead tr { background: rgba(201,168,76,0.1); border-bottom: 1px solid rgba(201,168,76,0.3); }
+.cf-table-wrap th { padding: 11px 12px; text-align: right; color: #c9a84c; font-weight: 600; white-space: nowrap; }
+.cf-table-wrap td { padding: 8px 12px; text-align: right; border-bottom: 1px solid rgba(255,255,255,0.03); font-family: 'DM Mono', monospace; }
+.cf-table-wrap tr.cf-even { background: rgba(255,255,255,0.015); }
+.cf-table-wrap tr.cf-highlighted { background: rgba(201,168,76,0.12) !important; }
+.cf-td-amount { color: #f0e0a0; } .cf-td-fee { color: #c9a84c; font-weight: 600; }
+.cf-pct-badge { background: rgba(201,168,76,0.15); padding: 2px 7px; border-radius: 10px; display: inline-block; }
+.cf-td-ratio { color: #9a8866; }
+.cf-table-footer td { text-align: center; color: #c9a84c; font-size: 12px; padding: 12px; background: rgba(201,168,76,0.08); border-top: 2px solid rgba(201,168,76,0.3); }
+.cf-close-row { text-align: center; margin-top: 16px; }
+.cf-close-btn { padding: 10px 28px; background: rgba(0,0,0,0.3); border: 1.5px solid #c9a84c; border-radius: 8px; color: #c9a84c; font-size: 14px; cursor: pointer; font-family: inherit; }
+.cf-hidden { display: none !important; }
+
+/* Tabs */
+.cf-tabs { display: flex; gap: 8px; margin-bottom: 16px; }
+.cf-tab {
+  flex: 1; padding: 12px 8px; background: rgba(255,255,255,0.03);
+  border: 1.5px solid rgba(201,168,76,0.25); border-radius: 10px;
+  color: #9a8866; font-size: 13px; font-weight: 600; cursor: pointer;
+  font-family: 'Noto Sans Devanagari', sans-serif; transition: all 0.2s;
+}
+.cf-tab.active { background: rgba(201,168,76,0.18); border-color: #c9a84c; color: #f0e0a0; }
+
+/* ===== NI Act / Cheque Calculator (paper style) ===== */
+.cq-card {
+  background: #f5f0e8; border: 1px solid #c8b890; border-radius: 12px;
+  padding: 18px; color: #1a1205; font-family: 'Noto Sans Devanagari', sans-serif;
+}
+.cq-label { display: block; font-size: 13px; font-weight: 600; color: #5a4a2a; margin-bottom: 8px; letter-spacing: 0.5px; }
+.cq-input-wrap { position: relative; display: flex; align-items: center; }
+.cq-rupee { position: absolute; left: 14px; font-size: 18px; color: #5a4a2a; font-weight: 700; pointer-events: none; }
+.cq-card input[type=number] {
+  width: 100%; padding: 14px 14px 14px 38px; font-size: 22px; font-weight: 700;
+  color: #1a1205; background: white; border: 2px solid #c8b890; border-radius: 3px;
+  outline: none; -moz-appearance: textfield; font-family: 'Noto Sans Devanagari', sans-serif;
+}
+.cq-card input::-webkit-outer-spin-button, .cq-card input::-webkit-inner-spin-button { -webkit-appearance: none; }
+.cq-card input:focus { border-color: #c8962a; box-shadow: 0 0 0 3px rgba(200,150,42,0.15); }
+.cq-slab-indicator { display: flex; gap: 8px; margin-top: 12px; }
+.cq-slab-pill { flex: 1; padding: 6px 4px; text-align: center; font-size: 10px; border: 1.5px solid #c8b890; border-radius: 2px; color: #5a4a2a; transition: all 0.3s; }
+.cq-slab-pill.active { background: #1a1205; border-color: #1a1205; color: #f5f0e8; }
+.cq-slab-pill span { display: block; font-size: 9px; opacity: 0.7; margin-top: 2px; }
+.cq-result-card { background: white; border: 2px solid #1a1205; border-radius: 3px; overflow: hidden; margin-top: 16px; color: #1a1205; }
+.cq-result-header { background: #1a1205; color: #f5f0e8; padding: 10px 18px; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; display: flex; justify-content: space-between; align-items: center; }
+.cq-stamp-badge { background: #b5271a; color: white; font-size: 9px; padding: 2px 7px; border-radius: 1px; letter-spacing: 1px; }
+.cq-result-body { padding: 18px; }
+.cq-calc-row { display: flex; justify-content: space-between; align-items: flex-end; padding: 8px 0; border-bottom: 1px dashed #d0c8b0; font-size: 13.5px; }
+.cq-calc-row:last-child { border-bottom: none; }
+.cq-calc-label { color: #5a4a2a; }
+.cq-calc-value { font-weight: 700; color: #1a1205; font-size: 15px; }
+.cq-big-fee { text-align: center; padding: 16px; background: #e8dfc8; margin-top: 12px; border-radius: 2px; border: 1.5px solid #c8b890; }
+.cq-big-fee .cq-label-small { font-size: 11px; color: #5a4a2a; letter-spacing: 1px; margin-bottom: 4px; }
+.cq-big-fee .cq-fee-amount { font-family: 'DM Serif Display', serif; font-size: 36px; font-weight: 700; color: #b5271a; line-height: 1; }
+.cq-big-fee .cq-fee-words { font-size: 12px; color: #5a4a2a; margin-top: 4px; font-style: italic; }
+.cq-formula-box { background: #f9f5ed; border-left: 4px solid #c8962a; padding: 10px 14px; margin-top: 14px; font-size: 12px; color: #5a4a2a; line-height: 1.7; }
+.cq-formula-box strong { color: #1a1205; }
+.cq-zero-state { text-align: center; padding: 24px; color: #b0a080; font-size: 14px; }
+.cq-zero-state .cq-icon { font-size: 32px; margin-bottom: 8px; opacity: 0.5; }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="header">
+    <div class="badge">⚖ MPSLA — Legal Aid Directory</div>
+    <h1>MP Legal Aid Defence Counsel</h1>
+    <p class="subtitle">मध्यप्रदेश राज्य विधिक सेवा प्राधिकरण, जबलपुर</p>
+  </div>
+
+  <div class="stats-bar">
+    <div class="stat-chip"><span class="num">52</span> जिले</div>
+    <div class="stat-chip"><span class="num" id="totalCount">—</span> कुल अधिवक्ता</div>
+    <div class="stat-chip" style="border-color:rgba(245,158,11,0.3)"><span class="num" style="color:var(--chief)" id="chiefCount">—</span> Chief</div>
+    <div class="stat-chip" style="border-color:rgba(59,130,246,0.3)"><span class="num" id="deputyCount">—</span> Deputy</div>
+    <div class="stat-chip" style="border-color:rgba(16,185,129,0.3)"><span class="num" style="color:var(--assistant)" id="asstCount">—</span> Assistant</div>
+  </div>
+
+  <!-- Designation Filter Buttons -->
+  <div style="display:flex;gap:12px;justify-content:center;margin-bottom:24px;flex-wrap:wrap;">
+    <button onclick="showDesigList('Chief')" style="flex:1;max-width:200px;padding:14px 10px;background:rgba(245,158,11,0.12);border:2px solid rgba(245,158,11,0.5);border-radius:12px;color:#f59e0b;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;">&#11088; सभी Chief</button>
+    <button onclick="showDesigList('Deputy')" style="flex:1;max-width:200px;padding:14px 10px;background:rgba(59,130,246,0.12);border:2px solid rgba(59,130,246,0.5);border-radius:12px;color:#3b82f6;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;">&#128309; सभी Deputy</button>
+    <button onclick="showDesigList('Assistant')" style="flex:1;max-width:200px;padding:14px 10px;background:rgba(16,185,129,0.12);border:2px solid rgba(16,185,129,0.5);border-radius:12px;color:#10b981;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;">&#128994; सभी Assistant</button>
+  </div>
+
+  <!-- Designation List Panel -->
+  <div id="desigPanel" style="display:none;margin-bottom:28px;">
+    <div id="desigHeader" style="background:linear-gradient(135deg,#1a2235,#1e3a5f);border:1px solid #3b82f6;border-radius:14px;padding:18px 24px;margin-bottom:16px;"></div>
+    <div id="desigGrid" class="counsel-grid"></div>
+    <div style="text-align:center;margin-top:16px;">
+      <button onclick="closeDesigPanel()" style="padding:10px 28px;background:#1a2235;border:1.5px solid #3b82f6;border-radius:8px;color:#3b82f6;font-size:14px;cursor:pointer;font-family:inherit;">&#10006; बंद करें</button>
+    </div>
+  </div>
+
+  <div class="search-section">
+    <span class="search-icon">&#128269;</span>
+    <input type="text" id="searchInput" placeholder="जिले का नाम खोजें... (e.g. Bhopal, Indore, Jabalpur)" autocomplete="off">
+    <div class="dropdown" id="dropdown"></div>
+  </div>
+
+  <div id="districtPanel">
+    <div class="district-header" id="districtHeader"></div>
+    <div class="counsel-grid" id="counselGrid"></div>
+  </div>
+
+  <div id="defaultState" class="empty-state">
+    <div class="icon">🗺️</div>
+    <p>ऊपर जिले का नाम टाइप करें और उसके सभी Legal Aid Defence Counsel की जानकारी देखें</p>
+  </div>
+
+  <!-- Court Fee Calculator Button -->
+  <div style="text-align:center;margin-top:24px;margin-bottom:8px;">
+    <button onclick="cfToggle()" id="cfToggleMainBtn" style="display:inline-block;padding:16px 32px;background:linear-gradient(135deg,rgba(245,158,11,0.15),rgba(245,158,11,0.05));border:2px solid rgba(245,158,11,0.6);border-radius:14px;color:#f59e0b;font-size:16px;font-weight:700;font-family:inherit;letter-spacing:0.5px;cursor:pointer;">
+      ⚖️ Court Fee Calculator
+    </button>
+    <div style="color:#64748b;font-size:11px;margin-top:8px;">Court Fees Act 1870 — धारा 138 NI Act</div>
+  </div>
+
+  <!-- ===== Embedded Court Fee Calculator ===== -->
+  <div class="cf-wrap" id="cfWrap">
+    <div class="cf-header">
+      <div class="cf-badge">⚖ Court Fee Calculator</div>
+      <h2>न्यायालय शुल्क कैलकुलेटर</h2>
+      <p>Court Fees Act 1870 — मध्य प्रदेश</p>
+    </div>
+
+    <div class="cf-tabs">
+      <button class="cf-tab active" id="cfTabBtnNi" onclick="cfSwitchTab('ni')">चेक राशि (धारा 138 NI Act)</button>
+      <button class="cf-tab" id="cfTabBtnSuit" onclick="cfSwitchTab('suit')">वाद मूल्य (सिविल वाद)</button>
+    </div>
+
+    <!-- ===== TAB 1: NI Act Cheque Calculator ===== -->
+    <div id="cfNiTab">
+      <div class="cq-card">
+        <label class="cq-label">चेक की रकम दर्ज करें (रुपये में)</label>
+        <div class="cq-input-wrap">
+          <span class="cq-rupee">₹</span>
+          <input type="number" id="cqAmount" placeholder="0" min="0" oninput="cqCalculate()">
+        </div>
+        <div class="cq-slab-indicator">
+          <div class="cq-slab-pill" id="cqSlab1">स्लैब 1<span>≤ ₹1,00,000</span></div>
+          <div class="cq-slab-pill" id="cqSlab2">स्लैब 2<span>₹1L – ₹5L</span></div>
+          <div class="cq-slab-pill" id="cqSlab3">स्लैब 3<span>&gt; ₹5,00,000</span></div>
+        </div>
+      </div>
+
+      <div class="cq-result-card">
+        <div class="cq-result-header">
+          <span>गणना परिणाम</span>
+          <span class="cq-stamp-badge">AUTO</span>
+        </div>
+        <div class="cq-result-body">
+          <div class="cq-zero-state" id="cqZeroState">
+            <div class="cq-icon">📋</div>
+            चेक की रकम दर्ज करें
+          </div>
+          <div id="cqResultContent" style="display:none;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== TAB 2: Suit Value Calculator ===== -->
+    <div id="cfSuitTab" class="cf-hidden">
+      <div class="cf-card">
+        <label class="cf-input-label">वाद मूल्य दर्ज करें (SUIT VALUE)</label>
+        <div class="cf-input-wrap">
+          <span class="cf-rupee">₹</span>
+          <input type="number" id="cfAmtInput" placeholder="जैसे: 500000" inputmode="numeric" oninput="cfCalculate()" />
+        </div>
+        <div class="cf-amount-text" id="cfAmtText"></div>
+      </div>
+
+      <div class="cf-card cf-hidden" id="cfResultCard">
+        <div class="cf-result-grid">
+          <div class="cf-result-item">
+            <div class="cf-result-label">न्यायालय शुल्क</div>
+            <div class="cf-result-value cf-v-gold" id="cfRFee">—</div>
+            <div class="cf-result-sub">COURT FEE</div>
+          </div>
+          <div class="cf-result-item">
+            <div class="cf-result-label">प्रतिशत</div>
+            <div class="cf-result-value cf-v-yellow" id="cfRPct">—</div>
+            <div class="cf-result-sub">PERCENTAGE</div>
+          </div>
+          <div class="cf-result-item">
+            <div class="cf-result-label">अनुपात</div>
+            <div class="cf-result-value cf-v-tan" id="cfRRatio" style="font-size:clamp(12px,3vw,18px)">—</div>
+            <div class="cf-result-sub">FEE : AMOUNT</div>
+          </div>
+        </div>
+        <div class="cf-bar-wrap">
+          <div class="cf-bar-header"><span>शुल्क दर</span><span id="cfBarPct">0%</span></div>
+          <div class="cf-bar-track"><div class="cf-bar-fill" id="cfBarFill" style="width:0%"></div></div>
+        </div>
+        <div class="cf-breakdown">
+          <div class="cf-brow"><span class="cf-brow-label">वाद मूल्य</span><span class="cf-brow-val" id="cfBAmount">—</span></div>
+          <div class="cf-brow"><span class="cf-brow-label">न्यायालय शुल्क</span><span class="cf-brow-val" style="color:#c9a84c" id="cfBFee">—</span></div>
+          <div class="cf-brow"><span class="cf-brow-label">प्रतिशत</span><span class="cf-brow-val" id="cfBPct">—</span></div>
+          <div class="cf-brow"><span class="cf-brow-label">अनुपात (शुल्क:राशि)</span><span class="cf-brow-val" id="cfBRatio">—</span></div>
+        </div>
+        <div class="cf-cap-notice cf-hidden" id="cfCapNotice">⚠️ अधिकतम शुल्क ₹1,50,000 लागू — Maximum Fee Cap Applied</div>
+      </div>
+
+      <div class="cf-card">
+        <div class="cf-quick-label">— त्वरित उदाहरण —</div>
+        <div class="cf-quick-grid">
+          <button class="cf-quick-btn" onclick="cfSetAmount(10000)">₹10K</button>
+          <button class="cf-quick-btn" onclick="cfSetAmount(50000)">₹50K</button>
+          <button class="cf-quick-btn" onclick="cfSetAmount(100000)">₹1L</button>
+          <button class="cf-quick-btn" onclick="cfSetAmount(500000)">₹5L</button>
+          <button class="cf-quick-btn" onclick="cfSetAmount(1000000)">₹10L</button>
+          <button class="cf-quick-btn" onclick="cfSetAmount(2500000)">₹25L</button>
+          <button class="cf-quick-btn" onclick="cfSetAmount(5000000)">₹50L</button>
+          <button class="cf-quick-btn" onclick="cfSetAmount(10000000)">₹1Cr</button>
+        </div>
+      </div>
+
+      <button class="cf-toggle-btn" onclick="cfToggleTable()" id="cfToggleBtn">▼ पूरी शुल्क तालिका देखें — Full Fee Schedule</button>
+      <div class="cf-table-wrap cf-hidden" id="cfTableWrap">
+        <table>
+          <thead><tr><th>वाद मूल्य (₹)</th><th>शुल्क (₹)</th><th>%</th><th>अनुपात</th></tr></thead>
+          <tbody id="cfTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="cf-close-row">
+      <button class="cf-close-btn" onclick="cfToggle()">✖ बंद करें</button>
+    </div>
+  </div>
+
+  <div class="footer">
+    Madhya Pradesh State Legal Services Authority, Jabalpur<br>
+    Legal Aid Defence Counsels — अनुसूची 2(1)(बी) | सभी जानकारी आधिकारिक सूची पर आधारित
+  </div>
+</div>
+
+<script>
+const DATA = [
+  { district: "Alirajpur", sno: 1, counsels: [
+    { sr: 1, name: "Shri Rajesh Rathore", desig: "Chief", mobile: "9425486004", email: "rajeshrathore.adv08@gmail.com", date: "14-08-23" },
+    { sr: 2, name: "Shri Chitvan Gehlot", desig: "Deputy", mobile: "9424095722", email: "chitvangehlot40@gmail.com", date: "14-08-23" },
+    { sr: 3, name: "Shri Abhishek Vani", desig: "Assistant", mobile: "8821989153", email: "abhishekvani595@gmail.com", date: "14-08-23" },
+    { sr: 4, name: "Shri Rahul Sawner", desig: "Assistant", mobile: "9144873048", email: "rahulsawner04@gmail.com", date: "14-08-23" },
+  ]},
+  { district: "Anuppur", sno: 2, counsels: [
+    { sr: 1, name: "Sant Das Napit", desig: "Chief", mobile: "6261865988, 9893063812", email: "napitsantdas@gmail.com", date: "14-08-23" },
+    { sr: 2, name: "Shabir Ali", desig: "Deputy", mobile: "9407002493, 8109351901", email: "shabiraliadv@gmail.com", date: "14-08-23" },
+    { sr: 3, name: "Ram Krishna Soni", desig: "Deputy", mobile: "9755330220, 9669330220", email: "ramkrishnasoni8869@gmail.com", date: "14-08-23" },
+    { sr: 4, name: "Vikash Shukla", desig: "Assistant", mobile: "7049605310, 8839096064", email: "vikasshukla888.vs@gmail.com", date: "14-08-23" },
+    { sr: 5, name: "Smt. Shobha Patel", desig: "Assistant", mobile: "6262331436", email: "patelshobhapatelapr@gmail.com", date: "14-08-23" },
+    { sr: 6, name: "Ayush Soni", desig: "Assistant", mobile: "7987689154", email: "advocateayushsoni24@gmail.com", date: "08-09-23" },
+  ]},
+  { district: "Ashoknagar", sno: 3, counsels: [
+    { sr: 1, name: "Om Prakash Dubey", desig: "Chief", mobile: "9109673526", email: "adomprakashdubey1958@gmail.com", date: "20-02-23" },
+    { sr: 2, name: "Vishnu Narayan Birthare", desig: "Deputy", mobile: "9425767710", email: "advocatevishnu08@gmail.com", date: "20-02-23" },
+    { sr: 3, name: "Rafik Khan Pinjara", desig: "Deputy", mobile: "8817736460", email: "adrafikkhan866@gmail.com", date: "20-02-23" },
+    { sr: 4, name: "Himanshu Parashar", desig: "Assistant", mobile: "8962213243", email: "himanshu.parashar88@gmail.com", date: "20-02-23" },
+    { sr: 5, name: "Abhishek Singh Yadav", desig: "Assistant", mobile: "9819870287", email: "abhisheksinghyadav10@gmail.com", date: "20-02-23" },
+    { sr: 6, name: "Devendra Singh Dangi", desig: "Assistant", mobile: "9893886171", email: "devendradangi2@gmail.com", date: "06-09-23" },
+  ]},
+  { district: "Balaghat", sno: 4, counsels: [
+    { sr: 1, name: "Basant Dahake", desig: "Chief", mobile: "9993547455", email: "basantdahakey@gmail.com", date: "17-02-23" },
+    { sr: 2, name: "Mohd. Naved", desig: "Deputy", mobile: "8458844837", email: "Khannaved19168@gmail.com", date: "17-02-23" },
+    { sr: 3, name: "Ashutosh Shukla", desig: "Deputy", mobile: "9425448352", email: "adv.ahutoshamar@gmail.com", date: "01-09-23" },
+    { sr: 4, name: "Durgesh Limje", desig: "Assistant", mobile: "9424390153", email: "durgesh.limje@gmail.com", date: "17-02-23" },
+    { sr: 5, name: "Mukesh Lilhare", desig: "Assistant", mobile: "8982886023", email: "mukeshlilhaare@gmail.com", date: "17-02-23" },
+    { sr: 6, name: "Chandresh Nageshwar", desig: "Assistant", mobile: "9907944701", email: "chandresh1604@gmail.com", date: "17-02-23" },
+    { sr: 7, name: "Priyanka Shukla", desig: "Assistant", mobile: "9826218875", email: "Priyanka1shukla1@gmail.com", date: "17-02-23" },
+  ]},
+  { district: "Barwani", sno: 5, counsels: [
+    { sr: 1, name: "Hemendra Kumrawat", desig: "Chief", mobile: "8109225192", email: "ad.hemendrakumrawat@gmail.com", date: "17-02-23" },
+    { sr: 2, name: "Kundan Singh Solanki", desig: "Deputy", mobile: "9425090294", email: "kundansolanki999@gmail.com", date: "17-02-23" },
+    { sr: 3, name: "Sandeep Sharma", desig: "Deputy", mobile: "9977102155", email: "sandeep.sharma673@gmail.com", date: "17-02-23" },
+    { sr: 4, name: "Vinod Patidar", desig: "Assistant", mobile: "9981556282", email: "vinodpbarwani@gmail.com", date: "17-02-23" },
+    { sr: 5, name: "Vinita Dabi", desig: "Assistant", mobile: "9993166838", email: "Vinitadabi963@gmail.com", date: "17-02-23" },
+    { sr: 6, name: "Sitaram Khanna", desig: "Assistant", mobile: "9993112691", email: "sitaramkhanna18@gmail.com", date: "20-02-23" },
+    { sr: 7, name: "Sagar Panday", desig: "Assistant", mobile: "9644424828", email: "sagarpnaday232@gmail.com", date: "17-02-23" },
+    { sr: 8, name: "Kailash Tarole", desig: "Assistant", mobile: "9753727192", email: "ad.kailastarole93@gmail.com", date: "20-02-23" },
+    { sr: 9, name: "Deepak Chandore", desig: "Assistant", mobile: "9713780863", email: "chandoredeepak300@gmail.com", date: "17-02-23" },
+  ]},
+  { district: "Betul", sno: 6, counsels: [
+    { sr: 1, name: "Shyam Kishor Shukla", desig: "Chief", mobile: "9425003608", email: "shyamkishorshukla0@gmail.com", date: "14-08-23" },
+    { sr: 2, name: "Ajaz Khan", desig: "Deputy", mobile: "9340610256", email: "Aja213114@gmail.com", date: "14-08-23" },
+    { sr: 3, name: "Suresh Kumar Rakse", desig: "Deputy", mobile: "9826849304", email: "sureshkumarrakse@gmail.com", date: "14-08-23" },
+    { sr: 4, name: "Priyanka Chourasia", desig: "Assistant", mobile: "8871294935", email: "priyankachourasia2595@gmail.com", date: "14-08-23" },
+    { sr: 5, name: "Sunil Kumar More", desig: "Assistant", mobile: "9826940013", email: "sunilmorellb80@gmail.com", date: "14-08-23" },
+    { sr: 6, name: "Ajay Singh Sirsham", desig: "Assistant", mobile: "8109635355", email: "ajaysirsham10@gmail.com", date: "14-08-23" },
+  ]},
+  { district: "Bhind", sno: 7, counsels: [
+    { sr: 1, name: "Shri Hanumant Bohare", desig: "Chief", mobile: "9926407884", email: "hanumant277305@gmail.com", date: "14-08-23" },
+    { sr: 2, name: "Shri Ajay Kumar Tripathi", desig: "Deputy", mobile: "9826247162", email: "advajaytripathi98262@gmail.com", date: "14-08-23" },
+    { sr: 3, name: "Shri Ramveer Singh Bhadauria", desig: "Deputy", mobile: "9329726584", email: "ramveersinghbhadauria58@gmail.com", date: "14-08-23" },
+    { sr: 4, name: "Shri Amit Thapak", desig: "Assistant", mobile: "8889800165", email: "amitthapaknadvocate@gmail.com", date: "14-08-23" },
+    { sr: 5, name: "Smt. Sadhna Mishra", desig: "Assistant", mobile: "8319175644", email: "mishrasadhna045@gmail.com", date: "14-08-23" },
+    { sr: 6, name: "Ms. Vidushi Rajawat", desig: "Assistant", mobile: "9522060123", email: "vidushirajawat41@gmail.com", date: "14-08-23" },
+  ]},
+  { district: "Bhopal", sno: 8, counsels: [
+    { sr: 1, name: "Reena Verma", desig: "Chief", mobile: "9424474668", email: "reenavermaadvocate@gmail.com", date: "20-02-23" },
+    { sr: 2, name: "Arvind Kumar Singh", desig: "Deputy", mobile: "9981866028", email: "arvindapsrg28@gmail.com", date: "20-02-23" },
+    { sr: 3, name: "Syed Riyaz Hasan", desig: "Deputy", mobile: "9826093229", email: "riyazhasan19@gmail.com", date: "20-02-23" },
+    { sr: 4, name: "Mukesh Gour", desig: "Deputy", mobile: "9300761473", email: "ad.mukeshgour@gmail.com", date: "20-02-23" },
+    { sr: 5, name: "Dipesh Kumar Thakur", desig: "Assistant", mobile: "7008722743", email: "dipeshthakur679@gmail.com", date: "22-02-23" },
+    { sr: 6, name: "Shreyas Saxena", desig: "Assistant", mobile: "9713747016", email: "shreyas_2369@yahoo.in", date: "22-02-23" },
+    { sr: 7, name: "Meetendra Singh Maran", desig: "Assistant", mobile: "9630419698", email: "meetendrasinghmaran@gmail.com", date: "22-02-23" },
+    { sr: 8, name: "Supriya Tiwari", desig: "Assistant", mobile: "7697245701", email: "supriya180196@gmail.com", date: "22-02-23" },
+    { sr: 9, name: "Abhishek Dwivedi", desig: "Assistant", mobile: "8770981694", email: "dwivediabhishek3195@gmail.com", date: "22-02-23" },
+    { sr: 10, name: "Shreya Bhadoria", desig: "Assistant", mobile: "9165819204", email: "sheryabhadoria5@gmail.com", date: "22-02-23" },
+    { sr: 11, name: "Jyoti Priya Mishra", desig: "Assistant", mobile: "9575586076, 9752274048", email: "jyot.consel@gmail.com", date: "22-02-23" },
+  ]},
+  { district: "Burhanpur", sno: 9, counsels: [
+    { sr: 1, name: "Shri Jay Chouksey", desig: "Chief", mobile: "9039569095, 9229594250", email: "choukseyjay@gmail.com", date: "14-08-23" },
+    { sr: 2, name: "Shri Abdul Vakil Khan", desig: "Deputy", mobile: "9827566061, 9424017420", email: "advocate.avkhan@gmail.com", date: "14-08-23" },
+    { sr: 3, name: "Shri Achal Bannatwala", desig: "Assistant", mobile: "9425654689", email: "adv.bannatwala@gmail.com", date: "14-08-23" },
+  ]},
+  { district: "Chhatarpur", sno: 10, counsels: [
+    { sr: 1, name: "Rama Shankar Tiwari", desig: "Chief", mobile: "6263219984", email: "ramashankartiwari19836@gmail.com", date: "17-02-23" },
+    { sr: 2, name: "Rajendra Kumar Sharma", desig: "Deputy", mobile: "9425363836", email: "rajendrasharmachp8@gmail.com", date: "17-02-23" },
+    { sr: 3, name: "Ramkaran Shukla", desig: "Deputy", mobile: "9340506700", email: "ramkaranshukla21@gmail.com", date: "17-02-23" },
+    { sr: 4, name: "Priyanka Soni", desig: "Assistant", mobile: "9630003850", email: "priyankasoni201709@gmail.com", date: "17-02-23" },
+    { sr: 5, name: "Rishabh Agrawal", desig: "Assistant", mobile: "9074331789", email: "rishabhsinghal29@gmail.com", date: "21-02-23" },
+    { sr: 6, name: "Suyogaya Awasthy", desig: "Assistant", mobile: "8269896789", email: "suyogyaawasthy09@gmail.com", date: "17-02-23" },
+  ]},
+  { district: "Chhindwara", sno: 11, counsels: [
+    { sr: 1, name: "Shri Satish Raj Shriwas", desig: "Chief", mobile: "9407010880", email: "satishrajadvocate@gmail.com", date: "20-02-23" },
+    { sr: 2, name: "Shri Devkaran Thakre", desig: "Deputy", mobile: "9407381606", email: "thakredeokaran@gmail.com", date: "20-02-23" },
+    { sr: 3, name: "Smt. Shabnam Himesh Shukla", desig: "Assistant", mobile: "7354764574", email: "shabano.786@gmail.com", date: "20-02-23" },
+    { sr: 4, name: "Shri Rahul Tiwari", desig: "Assistant", mobile: "8871445630", email: "adv.rktiwari@gmail.com", date: "20-02-23" },
+    { sr: 5, name: "Shri Rahul Kumar Agrawal", desig: "Assistant", mobile: "9229292276", email: "rahulagrl@hotmail.com", date: "20-02-23" },
+  ]},
+  { district: "Damoh", sno: 12, counsels: [
+    { sr: 1, name: "Shri Manish Nagaich", desig: "Chief", mobile: "9300411935", email: "advnagaich@gmail.com", date: "01-01-23" },
+    { sr: 2, name: "Shri Madan Kumar Jain", desig: "Deputy", mobile: "9827823902", email: "madanjainadv@gmail.com", date: "01-01-23" },
+    { sr: 3, name: "Smt. Preksha Pathak", desig: "Deputy", mobile: "7000627718", email: "pathak.preksha1@gmail.com", date: "01-01-23" },
+    { sr: 4, name: "Shivani Parashar", desig: "Assistant", mobile: "9834951201", email: "shivani323209@gmail.com", date: "01-01-23" },
+    { sr: 5, name: "Richa Tripathi", desig: "Assistant", mobile: "8982559956", email: "tripathirich01@gmail.com", date: "01-01-23" },
+    { sr: 6, name: "Tuhina Majumdar", desig: "Assistant", mobile: "7470885449", email: "tuhinamajumdar@gmail.com", date: "01-01-23" },
+  ]},
+  { district: "Datia", sno: 13, counsels: [
+    { sr: 1, name: "Mr. Kailash Narayan Shrivastava", desig: "Chief", mobile: "9425118017", email: "knshrivastava05@gmail.com", date: "14-08-23" },
+    { sr: 2, name: "Mr. Salim Khan", desig: "Deputy", mobile: "9893335410", email: "saleemkhan61661@gmail.com", date: "14-08-23" },
+    { sr: 3, name: "Mr. Chandrabhan Singh Rawat", desig: "Deputy", mobile: "9329259577", email: "cbsrawat@gmail.com", date: "14-08-23" },
+    { sr: 4, name: "Mr. Vijay Ram Dohare", desig: "Assistant", mobile: "9926889687", email: "vijaydohare143@gmail.com", date: "14-08-23" },
+    { sr: 5, name: "Mr. Hariom Gupta", desig: "Assistant", mobile: "9406967710", email: "hariomgupta1077@gmail.com", date: "14-08-23" },
+  ]},
+  { district: "Dewas", sno: 14, counsels: [
+    { sr: 1, name: "Smt. Nilima Rai", desig: "Chief", mobile: "9425048223", email: "adv.neelima@gmail.com", date: "20-02-23" },
+    { sr: 2, name: "Shri Trilok Patidar", desig: "Deputy", mobile: "9893161615, 7000071126", email: "ad.trilokpatidar@gmail.com", date: "20-02-23" },
+    { sr: 3, name: "Shri Abhishek Tiwari", desig: "Assistant", mobile: "7580892782", email: "abhishektiwari.in@gmail.com", date: "20-02-23" },
+    { sr: 4, name: "Shri Arshil Khan", desig: "Assistant", mobile: "8319786759", email: "arshilkhan2112@gmail.com", date: "20-02-23" },
+  ]},
+  { district: "Dhar", sno: 15, counsels: [
+    { sr: 1, name: "Shri Satish Thakur", desig: "Chief", mobile: "9826581992", email: "satishadvocatedhar@gmail.com", date: "17-02-23" },
+    { sr: 2, name: "Smt. Niti Acharya", desig: "Deputy", mobile: "9926051335", email: "nitiacharya0@gmail.com", date: "19-02-23" },
+    { sr: 3, name: "Shri Jeeshan Mo. Sheikh", desig: "Deputy", mobile: "7869040164", email: "jeeshansheikh@gmail.com", date: "22-09-23" },
+    { sr: 4, name: "Shri Harshvardhan Chouchan", desig: "Assistant", mobile: "8989107965", email: "nitiacharya0@gmail.com", date: "17-02-23" },
+    { sr: 5, name: "Shri Aditya Phathak", desig: "Assistant", mobile: "9425629047", email: "phatakaditya26@gmail.com", date: "17-02-23" },
+    { sr: 6, name: "Smt. Rubeena Bano Sheikh", desig: "Assistant", mobile: "9424049286", email: "rubeena3134@gmail.com", date: "22-09-23" },
+  ]},
+  { district: "Dindori", sno: 16, counsels: [
+    { sr: 1, name: "Umesh Kumar Pateriya", desig: "Chief", mobile: "9425853677", email: "ukpateriyadindori@gmail.com", date: "16-12-23" },
+    { sr: 2, name: "Satyendra Kumar Yadav", desig: "Deputy", mobile: "9406770788", email: "satyendrayadav630@gmail.com", date: "16-08-23" },
+    { sr: 3, name: "Indivar Katare", desig: "Assistant", mobile: "9406947777", email: "indivar.din@gmail.com", date: "16-08-23" },
+    { sr: 4, name: "Shilpa Sahu", desig: "Assistant", mobile: "8359872783", email: "shilpasahu1212@gmail.com", date: "16-08-23" },
+  ]},
+  { district: "Guna", sno: 17, counsels: [
+    { sr: 1, name: "Surendra Singh Dhakad", desig: "Chief", mobile: "9425758808", email: "Advocatesurendra1547@gmail.com", date: "20-02-23" },
+    { sr: 2, name: "Majhar Alam", desig: "Deputy", mobile: "9826285447", email: "Majharalam2277@gmail.com", date: "20-02-23" },
+    { sr: 3, name: "Jyoti Chauhan", desig: "Deputy", mobile: "8085197781", email: "Jyotichouhan2273@gmail.com", date: "20-02-23" },
+    { sr: 4, name: "Shubham Gupta", desig: "Assistant", mobile: "9993212048", email: "Shubhamagr1997@gmail.com", date: "20-02-23" },
+    { sr: 5, name: "Rajendra Dhakad", desig: "Assistant", mobile: "9893589323", email: "rjdhakad1993@gmail.com", date: "20-02-23" },
+  ]},
+  { district: "Gwalior", sno: 18, counsels: [
+    { sr: 1, name: "Shri Arvind Singh Chauhan", desig: "Chief", mobile: "9977229212", email: "advocatechauhan31@gmail.com", date: "06-09-23" },
+    { sr: 2, name: "Shri Praveen Kumar Mittal", desig: "Deputy", mobile: "9907644242", email: "princemittal313@gmail.com", date: "06-09-23" },
+    { sr: 3, name: "Shri Girraj Singhal", desig: "Deputy", mobile: "9098959328", email: "girraj.singhal17@gmail.com", date: "06-09-23" },
+    { sr: 4, name: "Shri Omprakash Bhargava", desig: "Deputy", mobile: "9826261429", email: "opbhargava2@gmail.com", date: "20-09-23" },
+    { sr: 5, name: "Shri Aditya Kumar Singh", desig: "Assistant", mobile: "9644221220", email: "adityasinghadv2020@gmail.com", date: "06-09-23" },
+    { sr: 6, name: "Shri Shailendra Singh Sikarwar", desig: "Assistant", mobile: "8839477830", email: "shlndrskrwr@gmail.com", date: "06-09-23" },
+  ]},
+  { district: "Harda", sno: 19, counsels: [
+    { sr: 1, name: "Jawahar Pare", desig: "Chief", mobile: "9826383292", email: "Jawaharpare1967@gmail.com", date: "14-08-23" },
+    { sr: 2, name: "Anis Mohammed Khan", desig: "Deputy", mobile: "9826221173", email: "aniskhanhardamp.@gmail.com", date: "14-08-23" },
+    { sr: 3, name: "Antima Cholkar", desig: "Assistant", mobile: "9516409329", email: "antimacholkar115@gmail.com", date: "14-08-23" },
+  ]},
+  { district: "Hoshangabad", sno: 20, counsels: [
+    { sr: 1, name: "Satish Tiwari", desig: "Chief", mobile: "9827541621", email: "satishkumartiwari1965@gmail.com", date: "20-02-23" },
+    { sr: 2, name: "Anant Tiwari", desig: "Deputy", mobile: "9827204228", email: "anant1002000@yahoo.com", date: "20-02-23" },
+    { sr: 3, name: "Pankaj Tiwari", desig: "Deputy", mobile: "9425477038", email: "panjkajtiwari0529@gmail.com", date: "20-02-23" },
+    { sr: 4, name: "Mangal", desig: "Assistant", mobile: "7694910836", email: "msprsp@gmail.com", date: "22-02-23" },
+    { sr: 5, name: "Pankhuri Baradiya", desig: "Assistant", mobile: "7828396695", email: "pankhuribaradiya04@gmail.com", date: "22-02-23" },
+    { sr: 6, name: "Pooja Awasthy", desig: "Assistant", mobile: "8602681455", email: "awasthypooja373@gmail.com", date: "22-02-23" },
+  ]},
+  { district: "Indore", sno: 21, counsels: [
+    { sr: 1, name: "Shri Aashirwad Chaurasiya", desig: "Chief", mobile: "9407422888", email: "aashirwad888@gmail.com", date: "14-08-23" },
+    { sr: 2, name: "Smt. Ekta Sharma", desig: "Deputy", mobile: "9993979949", email: "ektasharma111@gmail.com", date: "14-08-23" },
+    { sr: 3, name: "Shri Kamal Kumar Soni", desig: "Deputy", mobile: "9425348291", email: "advocatekksoni@gmail.com", date: "14-08-23" },
+    { sr: 4, name: "Shri Gaurav Paliwal", desig: "Deputy", mobile: "9039425101", email: "adv.gdpaliwal@gmail.com", date: "14-08-23" },
+    { sr: 5, name: "Shri Akash Sharma", desig: "Assistant", mobile: "9713123030", email: "skylawy@gmail.com", date: "14-08-23" },
+    { sr: 6, name: "Smt. Sonali Goyal", desig: "Assistant", mobile: "8975366530", email: "sonaligoyal1993@gmail.com", date: "14-08-23" },
+    { sr: 7, name: "Sushri Shikha Tiwari", desig: "Assistant", mobile: "9424030479", email: "shikhatiwari94@gmail.com", date: "14-08-23" },
+    { sr: 8, name: "Sushri Soumya Singh Baghel", desig: "Assistant", mobile: "8319355214", email: "soumya.baghel@gmail.com", date: "14-08-23" },
+  ]},
+  { district: "Jabalpur", sno: 22, counsels: [
+    { sr: 1, name: "Ashok Kumar Patel", desig: "Chief", mobile: "8839410340", email: "patelashok3858@gmail.com", date: "01-11-23" },
+    { sr: 2, name: "Virendra Singh", desig: "Deputy", mobile: "9300842711", email: "adv.1virendrasingh@gmail.com", date: "01-11-23" },
+    { sr: 3, name: "Rajesh Kumar Tiwari", desig: "Deputy", mobile: "7489161744", email: "rajeshtiwari5762@gmail.com", date: "01-11-23" },
+    { sr: 4, name: "Abhishek Tiwari", desig: "Deputy", mobile: "9479866661", email: "kingsattorney@gmail.com", date: "01-11-23" },
+    { sr: 5, name: "Gaurav Pathak", desig: "Assistant", mobile: "9532637981", email: "pathakjhugun@gmail.com", date: "01-11-23" },
+    { sr: 6, name: "Vedant Patel", desig: "Assistant", mobile: "7581821081", email: "vedantpatleuc112@gmail.com", date: "01-11-23" },
+    { sr: 7, name: "Manish Mishra", desig: "Assistant", mobile: "9753350208", email: "manish.ghanshyam001@gmail.com", date: "03-11-24" },
+  ]},
+  { district: "Jhabua", sno: 23, counsels: [
+    { sr: 1, name: "Shri Rupesh Sharma", desig: "Deputy", mobile: "8319741662", email: "rupeshsharma0999@gmail.com", date: "17-02-23" },
+    { sr: 2, name: "Shri Ashok Singh Rathore", desig: "Deputy", mobile: "9425192241", email: "Shsnghrthr@gmail.com", date: "01-12-23" },
+    { sr: 3, name: "Shri Shivam Verma", desig: "Assistant", mobile: "9893925611", email: "shivam.av97@gmail.com", date: "20-02-23" },
+    { sr: 4, name: "Shri Vishwas Shah", desig: "Assistant", mobile: "9074230032", email: "vishwasshah66@gmail.com", date: "20-02-23" },
+  ]},
+  { district: "Katni", sno: 24, counsels: [
+    { sr: 1, name: "Sudarshan Prasad Yadav", desig: "Chief", mobile: "9977412753", email: "advocatespyadav758@gmail.com", date: "14-08-23" },
+    { sr: 2, name: "Ashish Kumar Dubey", desig: "Deputy", mobile: "6264040625, 9407059229", email: "dubeya202@gmail.com", date: "14-08-23" },
+    { sr: 3, name: "Aniket Upadhyay", desig: "Assistant", mobile: "7000213104", email: "aniket07legal@gmail.com", date: "14-08-23" },
+    { sr: 4, name: "Prakhar Pandey", desig: "Assistant", mobile: "8743834301", email: "prakharpandey2014@gmail.com", date: "14-08-23" },
+    { sr: 5, name: "Abhishek Kumar Mishra", desig: "Assistant", mobile: "8319912194, 9770532602", email: "abhishekmishraadvocate01@gmail.com", date: "14-08-23" },
+  ]},
+  { district: "Khandwa", sno: 25, counsels: [
+    { sr: 1, name: "Dashrath Singh Chauhan", desig: "Chief", mobile: "9826210833", email: "dashrathschauhan58@gmail.com", date: "14-08-23" },
+    { sr: 2, name: "Pritesh Dubey", desig: "Deputy", mobile: "9893390053", email: "priteshdubey32@gmail.com", date: "14-08-23" },
+    { sr: 3, name: "Rekha Joshi", desig: "Assistant", mobile: "9098291684", email: "83rekhajoshi@gmail.com", date: "14-08-23" },
+    { sr: 4, name: "Nikhil Gautam", desig: "Assistant", mobile: "9926463010", email: "gautamnikhil1978@gmail.com", date: "14-08-23" },
+    { sr: 5, name: "Sakshi Gupta", desig: "Assistant", mobile: "8827345111", email: "sakshikhandwa219@gmail.com", date: "14-08-23" },
+  ]},
+  { district: "Mandla", sno: 26, counsels: [
+    { sr: 1, name: "Shri Satyanarayan Mishra", desig: "Chief", mobile: "9425165801", email: "Satyanarayanmishra1956@gmail.com", date: "20-02-23" },
+    { sr: 2, name: "Shri Ajay Tiwari", desig: "Deputy", mobile: "9424632725", email: "ajaytiwarimitra111@gmail.com", date: "20-02-23" },
+    { sr: 3, name: "Shri Mohammad Yakub Khokhar", desig: "Deputy", mobile: "8959456079", email: "mykhokhar011@gmail.com", date: "20-02-23" },
+    { sr: 4, name: "Shri Ashish Anand Pandey", desig: "Assistant", mobile: "9424989901", email: "ASHISHANANDPANDEY@gmail.com", date: "20-02-23" },
+    { sr: 5, name: "Miss Sharadda Singh Rajpoot", desig: "Assistant", mobile: "9691959087", email: "Singhshraddha45@gmail.com", date: "20-02-23" },
+  ]},
+  { district: "Mandleshwar", sno: 27, counsels: [
+    { sr: 1, name: "Sanjay Tripathi", desig: "Chief", mobile: "9827010514", email: "Sanjaytripathi150779@gmail.com", date: "14-08-23" },
+    { sr: 2, name: "Shaija Shaikh", desig: "Deputy", mobile: "9926771287", email: "Shaija403@gmail.com", date: "14-08-23" },
+    { sr: 3, name: "Rupesh Kumar Sharma", desig: "Deputy", mobile: "9770144403", email: "rupeshsharma19@gmail.com", date: "14-08-23" },
+    { sr: 4, name: "Vinod Bhalse", desig: "Assistant", mobile: "9826678214", email: "Vinodebhalse@gmail.com", date: "14-08-23" },
+    { sr: 5, name: "Amit Mittal", desig: "Assistant", mobile: "8085711000", email: "advamitgopalmittal@gmail.com", date: "14-08-23" },
+    { sr: 6, name: "Nisha Koushal", desig: "Assistant", mobile: "9009916216", email: "nishakaushal444999@gmail.com", date: "14-08-23" },
+  ]},
+  { district: "Mandsaur", sno: 28, counsels: [
+    { sr: 1, name: "Shri Pramod Menaria", desig: "Chief", mobile: "9981056062", email: "Pramoenaria9981056062@gmail.com", date: "17-02-23" },
+    { sr: 2, name: "Shri Rajkumar Singh Devra", desig: "Deputy", mobile: "9425107398", email: "Rajkumar.singhdevara123@gmail.com", date: "17-02-23" },
+    { sr: 3, name: "Shri Himmat Singh Sankhla", desig: "Deputy", mobile: "9993132117", email: "Himmatsingh911@gmail.com", date: "20-02-23" },
+    { sr: 4, name: "Shri Sunil Kumar Badodiya", desig: "Assistant", mobile: "9479434104", email: "Sunilkumarbadodiya@gmail.com", date: "17-02-23" },
+    { sr: 5, name: "Ms. Dolly Makkad", desig: "Assistant", mobile: "7089077301", email: "advdollymds@gmail.com", date: "17-02-23" },
+    { sr: 6, name: "Smt. Uma Bairagi", desig: "Assistant", mobile: "9301261303", email: "Bairagi.uma@gmail.com", date: "17-02-23" },
+  ]},
+  { district: "Morena", sno: 29, counsels: [
+    { sr: 1, name: "Shri Atul Rawat", desig: "Chief", mobile: "9827805432", email: "atulrawat259@gmail.com", date: "14-08-23" },
+    { sr: 2, name: "Shri Umakant Richhariya", desig: "Deputy", mobile: "9039622150", email: "sonusharmaadvocate@gmail.com", date: "14-08-23" },
+    { sr: 3, name: "Ku. Anshika Raghuwanshi", desig: "Assistant", mobile: "—", email: "anshikaraghuwanshi323@gmail.com", date: "14-08-23" },
+    { sr: 4, name: "Shri Dinesh Sharma", desig: "Assistant", mobile: "9425120392", email: "dineshsharmaad5@gmail.com", date: "09-09-23" },
+  ]},
+  { district: "Narsinghpur", sno: 30, counsels: [
+    { sr: 1, name: "Shri Vishnu Shrivastava", desig: "Chief", mobile: "9525170377", email: "vishnushrivastava55@gmail.com", date: "17-02-23" },
+    { sr: 2, name: "Shri Pramod Kachi", desig: "Deputy", mobile: "9826472754", email: "pramodkachi17@gmail.com", date: "17-02-23" },
+    { sr: 3, name: "Shri Sudhir Dubey", desig: "Deputy", mobile: "9893253025", email: "dubey.sudhir1974@gmail.com", date: "17-02-23" },
+    { sr: 4, name: "Shri Jagdish Patel", desig: "Assistant", mobile: "9424302575", email: "jagdeeshpatel18@gmail.com", date: "17-02-23" },
+    { sr: 5, name: "Shri Sanjeev Soni", desig: "Assistant", mobile: "9893794277", email: "adv.sanjeev02@gmail.com", date: "17-02-23" },
+  ]},
+  { district: "Neemuch", sno: 31, counsels: [
+    { sr: 1, name: "Champalal Ahirwar", desig: "Chief", mobile: "9589269361", email: "clahirwar0321@gmail.com", date: "14-08-23" },
+    { sr: 2, name: "Aasif Husain", desig: "Deputy", mobile: "9893227587", email: "Aasif.84husain@gmail.com", date: "14-08-23" },
+    { sr: 3, name: "Sonali Mathur", desig: "Assistant", mobile: "9074220101", email: "sonimathur858@gmail.com", date: "14-08-23" },
+    { sr: 4, name: "Sandeep Chouhan", desig: "Assistant", mobile: "9399223458", email: "chouhans088@gmail.com", date: "18-08-23" },
+    { sr: 5, name: "Arpita Sanghvi", desig: "Assistant", mobile: "7089977295", email: "jainarpita37@gmail.com", date: "10-04-24" },
+  ]},
+  { district: "Panna", sno: 32, counsels: [
+    { sr: 1, name: "Shri Anand Kumar Tripathi", desig: "Chief", mobile: "7000677060", email: "anandtripathi539@gmail.com", date: "28-10-23" },
+    { sr: 2, name: "Shri Karan Singh", desig: "Deputy", mobile: "9893467765", email: "Karansinghadvocate88@gmail.com", date: "28-10-23" },
+    { sr: 3, name: "Pavan Kumar Pandey", desig: "Deputy", mobile: "—", email: "—", date: "28-10-23" },
+    { sr: 4, name: "Sushri Vijay Laxmi", desig: "Assistant", mobile: "8518921812", email: "VIJAYLAXMI19P@GMAIL.COM", date: "28-10-23" },
+    { sr: 5, name: "Shri Rohit Nayak", desig: "Assistant", mobile: "9425847127", email: "nayakrohit02@gmail.com", date: "28-10-23" },
+    { sr: 6, name: "Shri Shashank Chaturvedi", desig: "Assistant", mobile: "7773067903", email: "shashankchaturvedi1996@gmail.com", date: "28-10-23" },
+  ]},
+  { district: "Raisen", sno: 33, counsels: [
+    { sr: 1, name: "Shri Ajay Kumar Saxena", desig: "Chief", mobile: "6232379600, 9826360390", email: "ajaysaxena17408@gmail.com", date: "17-02-23" },
+    { sr: 2, name: "Shri Vinay Kumar Khare", desig: "Deputy", mobile: "8770653321, 9893807084", email: "vinaykhare143silwani@gmail.com", date: "17-02-23" },
+    { sr: 3, name: "Shri Shivam Sarathe", desig: "Assistant", mobile: "8839846136", email: "shivamsarathe007@gmail.com", date: "17-02-23" },
+  ]},
+  { district: "Rajgarh", sno: 34, counsels: [
+    { sr: 1, name: "Sh. Brijesh Tiwari", desig: "Chief", mobile: "8878038773", email: "tiwaribrijesh119@gmail.com", date: "14-08-23" },
+    { sr: 2, name: "Sh. Narayan Singh Verma", desig: "Deputy", mobile: "9424511418", email: "advocate.ns.verma@gmail.com", date: "14-08-23" },
+    { sr: 3, name: "Sh. Mohd. Yunus Ansari", desig: "Deputy", mobile: "9826966414", email: "ayunus452@gmail.com", date: "14-08-23" },
+    { sr: 4, name: "Sh. Vishnu Pratap Singh Panwar", desig: "Assistant", mobile: "6232888634", email: "vpanwar1111@gmail.com", date: "14-08-23" },
+    { sr: 5, name: "Sh. Kailash Chandra Prajapati", desig: "Assistant", mobile: "8962445438", email: "kpngh18@gmail.com", date: "14-08-23" },
+    { sr: 6, name: "Ku. Kiran Pushpad", desig: "Assistant", mobile: "8319871857", email: "kiranpushpad19@gmail.com", date: "14-08-23" },
+  ]},
+  { district: "Ratlam", sno: 35, counsels: [
+    { sr: 1, name: "Shri Abhay Sharma", desig: "Chief", mobile: "9425104144", email: "advocate378@gmail.com", date: "14-08-23" },
+    { sr: 2, name: "Shri Durgashankar Patidar", desig: "Deputy", mobile: "9827543622", email: "patidardspatidar@gmail.com", date: "14-08-23" },
+    { sr: 3, name: "Shri Anil Kumar Sharma", desig: "Deputy", mobile: "9098631679", email: "anilsharmaadv79@gmail.com", date: "14-08-23" },
+    { sr: 4, name: "Shri Harish Rajak", desig: "Assistant", mobile: "9685131619", email: "harishrajak301@gmail.com", date: "14-08-23" },
+    { sr: 5, name: "Susri Shraddha Yadav", desig: "Assistant", mobile: "9165589320", email: "shraddhay22@gmail.com", date: "14-08-23" },
+    { sr: 6, name: "Shri Sudhanshu Sethiya", desig: "Assistant", mobile: "8109835935", email: "sudhanshusethiya8@gmail.com", date: "14-08-23" },
+  ]},
+  { district: "Rewa", sno: 36, counsels: [
+    { sr: 1, name: "Surendra Singh", desig: "Chief", mobile: "9201185940", email: "adv.surendra75@gmail.com", date: "01-11-23" },
+    { sr: 2, name: "Manzoor Ahmed Mansoori", desig: "Deputy", mobile: "9827088599", email: "adv.manzoor@rediffmail.com", date: "01-11-23" },
+    { sr: 3, name: "Anand Pandey", desig: "Deputy", mobile: "9424770931", email: "Pandey.advo@gmail.com", date: "01-11-23" },
+    { sr: 4, name: "Anish Kumar Pandey", desig: "Assistant", mobile: "9907273561", email: "Pandeyanish631@gmail.com", date: "01-11-23" },
+    { sr: 5, name: "Arti Tiwari", desig: "Assistant", mobile: "8305591625", email: "Arti227@gmail.com", date: "01-11-23" },
+  ]},
+  { district: "Sagar", sno: 37, counsels: [
+    { sr: 1, name: "Rajesh Biddoliya", desig: "Chief", mobile: "9300299019", email: "rbiddoliya@gmail.com", date: "14-08-23" },
+    { sr: 2, name: "Ramakant Mishra", desig: "Deputy", mobile: "9300232894", email: "ramakantmishraadvocate@gmail.com", date: "14-08-23" },
+    { sr: 3, name: "Mahendra Singh Thakur", desig: "Deputy", mobile: "8982004020", email: "mahrndra1915thakur@gmail.com", date: "14-08-23" },
+    { sr: 4, name: "Neelesh Kumar Jain", desig: "Assistant", mobile: "8305964101", email: "neelesh10.jan.nilu@gmail.com", date: "14-08-23" },
+    { sr: 5, name: "Rampratap Singh Rajput", desig: "Assistant", mobile: "9406538655", email: "rampratapsingh965@gmail.com", date: "06-09-23" },
+  ]},
+  { district: "Satna", sno: 38, counsels: [
+    { sr: 1, name: "Shri Brijendra Singh Rajpot", desig: "Chief", mobile: "9993207795", email: "brijendra.rajput56@gmail.com", date: "14-08-23" },
+    { sr: 2, name: "Shri Ramakant Tripathi", desig: "Deputy", mobile: "9407016454", email: "tripathiramakant53@gmail.com", date: "14-08-23" },
+    { sr: 3, name: "Shri Ramakant Pandey", desig: "Deputy", mobile: "6260668472", email: "ramakantpandey3016@gmail.com", date: "14-08-23" },
+    { sr: 4, name: "Smt. Shobha Dwivedi", desig: "Assistant", mobile: "8871884931", email: "dwivedishobha82@gmail.com", date: "14-08-23" },
+    { sr: 5, name: "Shri Jay Wardhan Dwivedi", desig: "Assistant", mobile: "9827786601", email: "girishdwivedi83@gmail.com", date: "14-08-23" },
+  ]},
+  { district: "Sehore", sno: 39, counsels: [
+    { sr: 1, name: "Mr. Rajendra Kumar Kushwaha", desig: "Deputy", mobile: "9713227225", email: "rkkushwah2003@gmail.com", date: "14-08-23" },
+    { sr: 2, name: "Mr. Asif Khan", desig: "Deputy", mobile: "9300427370", email: "asifkhan.321@gmail.com", date: "14-08-23" },
+    { sr: 3, name: "Mr. Aman Kulshrestha", desig: "Assistant", mobile: "7999758003", email: "amankulsh08@gmail.com", date: "14-08-23" },
+    { sr: 4, name: "Ku. Ekta Sen", desig: "Assistant", mobile: "9977014828", email: "senekta16@gmail.com", date: "14-08-23" },
+    { sr: 5, name: "Ku. Sanyogita Solanki", desig: "Assistant", mobile: "8962729039", email: "solanki1993sanyo@gmail.com", date: "14-10-23" },
+  ]},
+  { district: "Seoni", sno: 40, counsels: [
+    { sr: 1, name: "Shri Naveen Kumar Patel", desig: "Chief", mobile: "9407316376", email: "advnaveenpatel@gmail.com", date: "01-11-23" },
+    { sr: 2, name: "Shri Rishad Khan", desig: "Deputy", mobile: "9424717455", email: "rishadkhan355@gmail.com", date: "01-11-23" },
+    { sr: 3, name: "Shri Heeralal Sanodiya", desig: "Assistant", mobile: "9669932533", email: "Heerasanodiya75@gmail.com", date: "01-11-23" },
+    { sr: 4, name: "Shri Vishal Nikhare", desig: "Assistant", mobile: "9425175031", email: "vishalnikhare2002@gmail.com", date: "01-11-23" },
+  ]},
+  { district: "Shahdol", sno: 41, counsels: [
+    { sr: 1, name: "Shri Kunj Bihari Dwivedi", desig: "Chief", mobile: "9424331519", email: "kalpnakunj13@gmail.com", date: "05-09-23" },
+    { sr: 2, name: "Shri Ram Shankar Tiwari", desig: "Deputy", mobile: "9479624594, 6265687063", email: "advramshankar76@gmail.com", date: "20-02-23" },
+    { sr: 3, name: "Moh. Imran Khan", desig: "Deputy", mobile: "9098415783, 9425844594", email: "ik6149632@gmail.com", date: "20-02-23" },
+    { sr: 4, name: "SuShri. Priya Singh Baghel", desig: "Assistant", mobile: "7024906102, 8602622135", email: "priyasinghbaghel66@gmail.com", date: "20-02-23" },
+    { sr: 5, name: "SuShri. Ankita Singh", desig: "Assistant", mobile: "8602553308", email: "ankita43bba@gmail.com", date: "20-02-23" },
+  ]},
+  { district: "Shajapur", sno: 42, counsels: [
+    { sr: 1, name: "Inder Singh Gami", desig: "Chief", mobile: "9926464190", email: "adindergami@gmail.com", date: "20-02-23" },
+    { sr: 2, name: "Ajazuddin Khan", desig: "Deputy", mobile: "9826961957", email: "ajazmev@gmail.com", date: "20-02-23" },
+    { sr: 3, name: "Kiran Saxena", desig: "Deputy", mobile: "8463858135", email: "kiran55saxena@gmail.com", date: "20-02-23" },
+    { sr: 4, name: "Shubham Umath", desig: "Assistant", mobile: "7879020611", email: "shubhamumath@gmail.com", date: "20-02-23" },
+    { sr: 5, name: "Yash Purviya", desig: "Assistant", mobile: "7064345234", email: "yashpurwiya488@gmail.com", date: "20-02-23" },
+  ]},
+  { district: "Sheopur", sno: 43, counsels: [
+    { sr: 1, name: "Shri. Murlidhar Swarnkar", desig: "Chief", mobile: "9993264711", email: "murlidharsoni874@gmail.com", date: "14-08-23" },
+    { sr: 2, name: "Shri. Baboo Singh Varman", desig: "Deputy", mobile: "9826293921", email: "baboos98inghvarman@gmail.com", date: "14-08-23" },
+    { sr: 3, name: "Shri. Madho Khan", desig: "Deputy", mobile: "9753391502", email: "madhokhan101@gmail.com", date: "14-08-23" },
+    { sr: 4, name: "Smt. Mahima Rathore", desig: "Assistant", mobile: "7597770192", email: "mhimarthor069@gmail.com", date: "14-08-23" },
+    { sr: 5, name: "Shri. Amar Patil", desig: "Assistant", mobile: "7898259080", email: "jondin9080@gmail.com", date: "14-08-23" },
+    { sr: 6, name: "Ku. Surbhi Agrawal", desig: "Assistant", mobile: "9981290362", email: "agrawalsurbhi2809@gmail.com", date: "14-08-23" },
+  ]},
+  { district: "Shivpuri", sno: 44, counsels: [
+    { sr: 1, name: "Alok Shrivastava", desig: "Chief", mobile: "9525766120", email: "alokshri2471@gmail.com", date: "01-11-23" },
+    { sr: 2, name: "Nikhil Saxena", desig: "Deputy", mobile: "9893917499", email: "nikhiladv18@gmail.com", date: "01-11-23" },
+    { sr: 3, name: "Manish Kumar Jain", desig: "Deputy", mobile: "9754255611", email: "manishjain95911@gmail.com", date: "01-11-23" },
+    { sr: 4, name: "Pavan Kumar Chandel", desig: "Deputy", mobile: "9425133584", email: "advopavan1985@gmail.com", date: "01-11-23" },
+    { sr: 5, name: "Deepak Agrawal", desig: "Assistant", mobile: "8109885113", email: "agrawaldeepak301@gmail.com", date: "01-11-23" },
+    { sr: 6, name: "Nupur Rathore", desig: "Assistant", mobile: "7509343511", email: "npr2206@gmail.com", date: "01-11-23" },
+  ]},
+  { district: "Sidhi", sno: 45, counsels: [
+    { sr: 1, name: "Devendra Prasad Mishra", desig: "Chief", mobile: "9826467384", email: "dpmishra044@gmail.com", date: "01-11-23" },
+    { sr: 2, name: "Babulal Singh", desig: "Deputy", mobile: "9826320470", email: "Babulalsingh13@gmail.com", date: "01-11-23" },
+    { sr: 3, name: "Vinod Kumar Shrivastav", desig: "Deputy", mobile: "9926687242", email: "Vinodad189@gmail.com", date: "01-11-23" },
+    { sr: 4, name: "Devendra Prasad Dwivedi", desig: "Assistant", mobile: "9755108162", email: "Devendradwivedi09@gmail.com", date: "01-11-23" },
+    { sr: 5, name: "Satyaprakash Pandey", desig: "Assistant", mobile: "9993052425", email: "SPPandeyad@gmail.com", date: "01-11-23" },
+    { sr: 6, name: "Rishabh Singh", desig: "Assistant", mobile: "8871482825", email: "Singhrishabh709@gmail.com", date: "01-11-23" },
+  ]},
+  { district: "Singrauli", sno: 46, counsels: [
+    { sr: 1, name: "Santosh Kumar Pathak", desig: "Chief", mobile: "8770108913", email: "santoshkumarpathak@gmail.com", date: "01-11-23" },
+    { sr: 2, name: "Renu Puri", desig: "Deputy", mobile: "8839182450", email: "000renupuri@gmail.com", date: "01-11-23" },
+    { sr: 3, name: "Kevala Prasad Vishwakarma", desig: "Deputy", mobile: "9926393861", email: "kpvishw451974@gmail.com", date: "01-11-23" },
+    { sr: 4, name: "Vandana Singh", desig: "Assistant", mobile: "7049071452", email: "vandanasingh21988@gmail.com", date: "01-11-23" },
+    { sr: 5, name: "Aseem Akhtar", desig: "Assistant", mobile: "7247680318", email: "aseemakhtar0703@gmail.com", date: "01-11-23" },
+    { sr: 6, name: "Yogesh Shah", desig: "Assistant", mobile: "9425640617", email: "yashku99@gmail.com", date: "06-11-23" },
+  ]},
+  { district: "Tikamgarh", sno: 47, counsels: [
+    { sr: 1, name: "Shri Rajkumar Lodhi", desig: "Chief", mobile: "9630238656", email: "rajkumarlodhi161@gmail.com", date: "06-09-23" },
+    { sr: 2, name: "Shri Purushottam Soni", desig: "Deputy", mobile: "8319044572", email: "purushotam.soni.nwg@gmail.com", date: "14-08-23" },
+    { sr: 3, name: "Shri Sandeep Khare", desig: "Deputy", mobile: "9893064235", email: "laljikhare6782@gmail.com", date: "14-08-23" },
+    { sr: 4, name: "Shri Amar Singh Yadav", desig: "Assistant", mobile: "9131146673", email: "amaryadavtkg1988@gmail.com", date: "14-08-23" },
+    { sr: 5, name: "Sushri Shruti Himanshi Goel", desig: "Assistant", mobile: "7000304677", email: "shrutihimanshi@mail.com", date: "14-08-23" },
+    { sr: 6, name: "Mohammad Ajeez Qureshi", desig: "Assistant", mobile: "9617745633", email: "azizq8976@gmail.com", date: "14-08-23" },
+  ]},
+  { district: "Ujjain", sno: 48, counsels: [
+    { sr: 1, name: "Shri Santosh Malviya", desig: "Chief", mobile: "9826012144", email: "santoshmalviya7221@gmail.com", date: "14-08-23" },
+    { sr: 2, name: "Shri Prakash Chandra Saini", desig: "Deputy", mobile: "9827073871", email: "prakshchandrasaini@gmail.com", date: "14-08-23" },
+    { sr: 3, name: "Shri Sourabh Surana", desig: "Deputy", mobile: "8770575859", email: "adsaurabhsurana@gmail.com", date: "14-08-23" },
+    { sr: 4, name: "Shri Soumitra Sinha", desig: "Deputy", mobile: "9424550808", email: "soumitrasinha1981@gmail.com", date: "14-08-23" },
+    { sr: 5, name: "Shri Ram Santosh Phuphwale", desig: "Assistant", mobile: "8989550565", email: "phuphwaleram@gmail.com", date: "14-08-23" },
+    { sr: 6, name: "Ku. Durgesh Sahu", desig: "Assistant", mobile: "9926224807", email: "sahudurgesh2068@gmail.com", date: "14-08-23" },
+  ]},
+  { district: "Umariya", sno: 49, counsels: [
+    { sr: 1, name: "Mr. Suresh Chandra Mitrani", desig: "Chief", mobile: "9424954243", email: "sureshmitrani@gmail.com", date: "17-02-23" },
+    { sr: 2, name: "Mr. Vijay Ray", desig: "Deputy", mobile: "9424384133", email: "Vray@8097gmail.com", date: "17-02-23" },
+    { sr: 3, name: "Mr. Dinkar Prasad Tiwari", desig: "Deputy", mobile: "9893852460", email: "dinkartiwari1965@gmail.com", date: "17-02-23" },
+    { sr: 4, name: "Mrs. Sakshi Patel", desig: "Assistant", mobile: "7982097279", email: "juriesdoctor@gmail.com", date: "17-02-23" },
+    { sr: 5, name: "Mr. Gajraj Singh Vaish", desig: "Assistant", mobile: "9827847557", email: "gajrajsinghvaish@gmail.com", date: "17-02-23" },
+  ]},
+  { district: "Vidisha", sno: 50, counsels: [
+    { sr: 1, name: "Mr. Surjeet Singh Sikarwar", desig: "Chief", mobile: "8839792452", email: "surjeetsikarwar6@gmail.com", date: "20-02-23" },
+    { sr: 2, name: "Mr. Vinod Kushwah", desig: "Assistant", mobile: "8085918878", email: "vk785650@gmail.com", date: "20-02-23" },
+    { sr: 3, name: "Mr. Animesh Tiwari", desig: "Assistant", mobile: "8251894900", email: "animeshtiwari900@gmail.com", date: "20-02-23" },
+    { sr: 4, name: "Ku. Oshika Chaudhary", desig: "Assistant", mobile: "7838378665", email: "chaudharyoshika5@gmail.com", date: "21-02-23" },
+  ]},
+];
+
+// Compute totals
+let totalAll = 0, chiefAll = 0, deputyAll = 0, asstAll = 0;
+DATA.forEach(d => {
+  d.counsels.forEach(c => {
+    totalAll++;
+    if (c.desig === 'Chief') chiefAll++;
+    else if (c.desig.includes('Deputy')) deputyAll++;
+    else asstAll++;
+  });
+});
+document.getElementById('totalCount').textContent = totalAll;
+document.getElementById('chiefCount').textContent = chiefAll;
+document.getElementById('deputyCount').textContent = deputyAll;
+document.getElementById('asstCount').textContent = asstAll;
+
+function showDesigList(desig) {
+  const desigPanel = document.getElementById('desigPanel');
+  const desigHeader = document.getElementById('desigHeader');
+  const desigGrid = document.getElementById('desigGrid');
+
+  // Hide district panel
+  document.getElementById('districtPanel').style.display = 'none';
+  document.getElementById('defaultState').style.display = 'none';
+
+  // Filter all counsels of this designation
+  let all = [];
+  DATA.forEach(d => {
+    d.counsels.forEach(c => {
+      if (c.desig === desig || (desig === 'Deputy' && c.desig.includes('Deputy'))) {
+        all.push({ ...c, district: d.district });
+      }
+    });
+  });
+
+  const colors = { Chief: '#f59e0b', Deputy: '#3b82f6', Assistant: '#10b981' };
+  const color = colors[desig] || '#3b82f6';
+
+  desigHeader.innerHTML = `
+    <div style="font-size:20px;font-weight:700;color:${color};">${desig === 'Chief' ? '&#11088;' : desig === 'Deputy' ? '&#128309;' : '&#128994;'} सभी ${desig} — मध्यप्रदेश</div>
+    <div style="color:#64748b;font-size:13px;margin-top:4px;">कुल: <strong style="color:${color}">${all.length}</strong> अधिवक्ता | सभी जिले</div>
+  `;
+
+  desigGrid.innerHTML = all.map((c, i) => {
+    const cls = desig === 'Chief' ? 'chief' : desig === 'Deputy' ? 'deputy' : 'assistant';
+    const mobileDisplay = c.mobile && c.mobile !== '—'
+      ? `<a href="tel:${c.mobile.split(',')[0].trim()}" class="mono">&#128241; ${c.mobile}</a>`
+      : '<span style="color:var(--muted)">— उपलब्ध नहीं</span>';
+    const emailDisplay = c.email && c.email !== '—'
+      ? `<a href="mailto:${c.email}">&#9993;&#65039; ${c.email}</a>`
+      : '<span style="color:var(--muted)">— उपलब्ध नहीं</span>';
+
+    return `
+      <div class="counsel-card ${cls}">
+        <div class="sr-badge">${String(i+1).padStart(2,'0')}</div>
+        <div class="counsel-info">
+          <div class="counsel-name">${c.name}</div>
+          <div style="font-size:11px;color:${color};margin-bottom:4px;">&#128205; ${c.district}</div>
+          <div class="counsel-contact">
+            <div class="contact-item">${mobileDisplay}</div>
+            <div class="contact-item">${emailDisplay}</div>
+          </div>
+          <div class="date-label">&#128197; Empanelled: ${c.date}</div>
+        </div>
+        <div class="desig-badge">${c.desig}</div>
+      </div>
+    `;
+  }).join('');
+
+  desigPanel.style.display = 'block';
+  desigPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function closeDesigPanel() {
+  document.getElementById('desigPanel').style.display = 'none';
+  document.getElementById('defaultState').style.display = 'block';
+}
+
+const searchInput = document.getElementById('searchInput');
+const dropdown = document.getElementById('dropdown');
+const districtPanel = document.getElementById('districtPanel');
+const defaultState = document.getElementById('defaultState');
+
+function getDesigClass(d) {
+  if (d === 'Chief') return 'chief';
+  if (d.includes('Deputy')) return 'deputy';
+  return 'assistant';
+}
+
+function renderDropdown(query) {
+  const q = query.trim().toLowerCase();
+  if (!q) { dropdown.classList.remove('open'); return; }
+
+  const matches = DATA.filter(d => d.district.toLowerCase().includes(q));
+  if (matches.length === 0) {
+    dropdown.innerHTML = '<div class="dropdown-item"><span class="d-name" style="color:var(--muted)">कोई जिला नहीं मिला</span></div>';
+    dropdown.classList.add('open');
+    return;
+  }
+
+  dropdown.innerHTML = matches.map(d => `
+    <div class="dropdown-item" onclick="selectDistrict(${d.sno - 1})">
+      <span class="d-name">${d.district}</span>
+      <span class="d-count">${d.counsels.length} अधिवक्ता</span>
+    </div>
+  `).join('');
+  dropdown.classList.add('open');
+}
+
+function selectDistrict(idx) {
+  const d = DATA[idx];
+  searchInput.value = d.district;
+  dropdown.classList.remove('open');
+
+  const chiefs = d.counsels.filter(c => c.desig === 'Chief').length;
+  const deputies = d.counsels.filter(c => c.desig.includes('Deputy')).length;
+  const assts = d.counsels.filter(c => !c.desig.includes('Chief') && !c.desig.includes('Deputy')).length;
+
+  document.getElementById('districtHeader').innerHTML = `
+    <div>
+      <div class="district-title">📍 ${d.district}</div>
+      <div style="color:var(--muted);font-size:13px;margin-top:4px;">जिला क्रमांक ${d.sno} — Legal Aid Defence Counsels</div>
+    </div>
+    <div class="district-meta">
+      <div class="meta-pill total">🧑‍⚖️ कुल: ${d.counsels.length}</div>
+      ${chiefs ? `<div class="meta-pill chief-pill">⭐ Chief: ${chiefs}</div>` : ''}
+      ${deputies ? `<div class="meta-pill deputy-pill">🔵 Deputy: ${deputies}</div>` : ''}
+      ${assts ? `<div class="meta-pill asst-pill">🟢 Assistant: ${assts}</div>` : ''}
+    </div>
+  `;
+
+  document.getElementById('counselGrid').innerHTML = d.counsels.map(c => {
+    const cls = getDesigClass(c.desig);
+    const mobileDisplay = c.mobile && c.mobile !== '—'
+      ? `<a href="tel:${c.mobile.split(',')[0].trim()}" class="mono">📱 ${c.mobile}</a>`
+      : '<span style="color:var(--muted)">— उपलब्ध नहीं</span>';
+    const emailDisplay = c.email && c.email !== '—'
+      ? `<a href="mailto:${c.email}">✉️ ${c.email}</a>`
+      : '<span style="color:var(--muted)">— उपलब्ध नहीं</span>';
+
+    return `
+      <div class="counsel-card ${cls}" data-desig="${c.desig}">
+        <div class="sr-badge">${String(c.sr).padStart(2,'0')}</div>
+        <div class="counsel-info">
+          <div class="counsel-name">${c.name}</div>
+          <div class="counsel-contact">
+            <div class="contact-item">${mobileDisplay}</div>
+            <div class="contact-item">${emailDisplay}</div>
+          </div>
+          <div class="date-label">📅 Empanelled: ${c.date}</div>
+        </div>
+        <div class="desig-badge">${c.desig}</div>
+      </div>
+    `;
+  }).join('');
+
+  defaultState.style.display = 'none';
+  districtPanel.classList.add('show');
+  districtPanel.style.display = 'block';
+
+  // Scroll to panel smoothly
+  setTimeout(() => districtPanel.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
+}
+
+searchInput.addEventListener('input', () => renderDropdown(searchInput.value));
+
+searchInput.addEventListener('keydown', e => {
+  if (e.key === 'Escape') dropdown.classList.remove('open');
+});
+
+document.addEventListener('click', e => {
+  if (!e.target.closest('.search-section')) dropdown.classList.remove('open');
+});
+
+/* ================================================================
+   COURT FEE CALCULATOR (embedded — toggle, tabs, both calculators)
+   ================================================================ */
+
+function cfToggle() {
+  const wrap = document.getElementById('cfWrap');
+  const isShowing = wrap.classList.toggle('show');
+  if (isShowing) {
+    wrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+
+function cfSwitchTab(tab) {
+  const niTab = document.getElementById('cfNiTab');
+  const suitTab = document.getElementById('cfSuitTab');
+  const niBtn = document.getElementById('cfTabBtnNi');
+  const suitBtn = document.getElementById('cfTabBtnSuit');
+
+  if (tab === 'ni') {
+    niTab.classList.remove('cf-hidden');
+    suitTab.classList.add('cf-hidden');
+    niBtn.classList.add('active');
+    suitBtn.classList.remove('active');
+  } else {
+    niTab.classList.add('cf-hidden');
+    suitTab.classList.remove('cf-hidden');
+    niBtn.classList.remove('active');
+    suitBtn.classList.add('active');
+  }
+}
+
+/* ---------- TAB 1: NI Act / Cheque Amount Calculator ---------- */
+
+function cfFormatINR(n) {
+  return n.toLocaleString('en-IN', { maximumFractionDigits: 0 });
+}
+
+function cfToWords(n) {
+  if (n === 0) return 'शून्य रुपये';
+  const ones = ['', 'एक', 'दो', 'तीन', 'चार', 'पाँच', 'छः', 'सात', 'आठ', 'नौ',
+    'दस', 'ग्यारह', 'बारह', 'तेरह', 'चौदह', 'पंद्रह', 'सोलह', 'सत्रह', 'अठारह', 'उन्नीस'];
+  const tens = ['', '', 'बीस', 'तीस', 'चालीस', 'पचास', 'साठ', 'सत्तर', 'अस्सी', 'नब्बे'];
+
+  function convert(num) {
+    if (num === 0) return '';
+    if (num < 20) return ones[num] + ' ';
+    if (num < 100) return tens[Math.floor(num / 10)] + (num % 10 ? ' ' + ones[num % 10] : '') + ' ';
+    if (num < 1000) return ones[Math.floor(num / 100)] + ' सौ ' + convert(num % 100);
+    if (num < 100000) return convert(Math.floor(num / 1000)) + 'हजार ' + convert(num % 1000);
+    if (num < 10000000) return convert(Math.floor(num / 100000)) + 'लाख ' + convert(num % 100000);
+    return convert(Math.floor(num / 10000000)) + 'करोड़ ' + convert(num % 10000000);
+  }
+  return convert(Math.round(n)).trim() + ' रुपये';
+}
+
+function cqCalculate() {
+  const amount = parseFloat(document.getElementById('cqAmount').value) || 0;
+  const zeroState = document.getElementById('cqZeroState');
+  const resultContent = document.getElementById('cqResultContent');
+
+  ['cqSlab1','cqSlab2','cqSlab3'].forEach(id => document.getElementById(id).classList.remove('active'));
+
+  if (amount <= 0) {
+    zeroState.style.display = 'block';
+    resultContent.style.display = 'none';
+    return;
+  }
+
+  zeroState.style.display = 'none';
+  resultContent.style.display = 'block';
+
+  let courtFee = 0;
+  let slabId = '';
+  let formulaHTML = '';
+  let breakdownHTML = '';
+
+  const MAX_FEE = 150000;
+
+  if (amount <= 100000) {
+    slabId = 'cqSlab1';
+    let raw = amount * 0.05;
+    courtFee = Math.max(200, raw);
+    courtFee = Math.min(courtFee, MAX_FEE);
+
+    formulaHTML = `<strong>सूत्र:</strong> अनादरत चेक की रकम का <strong>5%</strong><br>
+      न्युनतम ₹200 रुपये के अधीन<br>
+      गणना: ₹${cfFormatINR(amount)} × 5% = ₹${cfFormatINR(raw)}`;
+
+    if (raw < 200) {
+      formulaHTML += `<br><em>→ न्युनतम फीस ₹200 लागू</em>`;
+    }
+
+    breakdownHTML = `
+      <div class="cq-calc-row">
+        <span class="cq-calc-label">चेक रकम</span>
+        <span class="cq-calc-value">₹${cfFormatINR(amount)}</span>
+      </div>
+      <div class="cq-calc-row">
+        <span class="cq-calc-label">दर (5%)</span>
+        <span class="cq-calc-value">₹${cfFormatINR(amount * 0.05)}</span>
+      </div>`;
+
+    if (raw < 200) {
+      breakdownHTML += `
+      <div class="cq-calc-row">
+        <span class="cq-calc-label">न्युनतम फीस लागू</span>
+        <span class="cq-calc-value">₹200</span>
+      </div>`;
+    }
+
+  } else if (amount <= 500000) {
+    slabId = 'cqSlab2';
+    const excess = amount - 100000;
+    const extra = excess * 0.04;
+    courtFee = 5000 + extra;
+    courtFee = Math.min(courtFee, MAX_FEE);
+
+    formulaHTML = `<strong>सूत्र:</strong> ₹5000 + (₹${cfFormatINR(amount)} - ₹1,00,000) का <strong>4%</strong><br>
+      = ₹5000 + ₹${cfFormatINR(excess)} × 4%<br>
+      = ₹5000 + ₹${cfFormatINR(extra)}`;
+
+    breakdownHTML = `
+      <div class="cq-calc-row">
+        <span class="cq-calc-label">चेक रकम</span>
+        <span class="cq-calc-value">₹${cfFormatINR(amount)}</span>
+      </div>
+      <div class="cq-calc-row">
+        <span class="cq-calc-label">आधार शुल्क</span>
+        <span class="cq-calc-value">₹5,000</span>
+      </div>
+      <div class="cq-calc-row">
+        <span class="cq-calc-label">₹1L से अधिक (₹${cfFormatINR(excess)}) × 4%</span>
+        <span class="cq-calc-value">₹${cfFormatINR(extra)}</span>
+      </div>`;
+
+  } else {
+    slabId = 'cqSlab3';
+    const excess = amount - 500000;
+    const extra = excess * 0.03;
+    courtFee = 21000 + extra;
+    courtFee = Math.min(courtFee, MAX_FEE);
+
+    const capped = (21000 + extra) > MAX_FEE;
+
+    formulaHTML = `<strong>सूत्र:</strong> ₹21000 + (₹${cfFormatINR(amount)} - ₹5,00,000) का <strong>3%</strong><br>
+      = ₹21000 + ₹${cfFormatINR(excess)} × 3%<br>
+      = ₹21000 + ₹${cfFormatINR(extra)}${capped ? '<br><em>→ अधिकतम सीमा ₹1,50,000 लागू</em>' : ''}`;
+
+    breakdownHTML = `
+      <div class="cq-calc-row">
+        <span class="cq-calc-label">चेक रकम</span>
+        <span class="cq-calc-value">₹${cfFormatINR(amount)}</span>
+      </div>
+      <div class="cq-calc-row">
+        <span class="cq-calc-label">आधार शुल्क</span>
+        <span class="cq-calc-value">₹21,000</span>
+      </div>
+      <div class="cq-calc-row">
+        <span class="cq-calc-label">₹5L से अधिक (₹${cfFormatINR(excess)}) × 3%</span>
+        <span class="cq-calc-value">₹${cfFormatINR(extra)}</span>
+      </div>`;
+
+    if (capped) {
+      breakdownHTML += `
+      <div class="cq-calc-row">
+        <span class="cq-calc-label">अधिकतम सीमा</span>
+        <span class="cq-calc-value" style="color:#b5271a">₹1,50,000</span>
+      </div>`;
+    }
+  }
+
+  document.getElementById(slabId).classList.add('active');
+
+  resultContent.innerHTML = `
+    <div>${breakdownHTML}</div>
+    <div class="cq-big-fee">
+      <div class="cq-label-small">देय कोर्ट फीस / स्टॉम्प ड्यूटी</div>
+      <div class="cq-fee-amount">₹${cfFormatINR(courtFee)}</div>
+      <div class="cq-fee-words">${cfToWords(courtFee)}</div>
+    </div>
+    <div class="cq-formula-box">${formulaHTML}</div>
+  `;
+}
+
+/* ---------- TAB 2: Suit Value Calculator (Court Fees Act 1870 Schedule) ---------- */
+
+const CF_TABLE = [
+  [1000,120],[2000,240],[3000,360],[4000,480],[5000,600],
+  [6000,720],[7000,840],[8000,960],[9000,1080],[10000,1200],
+  [15000,1800],[20000,2400],[25000,3000],[30000,3600],[35000,4200],
+  [40000,4800],[45000,5400],[50000,6000],[55000,6600],[60000,7200],
+  [70000,8400],[75000,9000],[80000,9600],[85000,10200],[90000,10800],
+  [95000,11400],[100000,12000],[110000,13200],[120000,14400],[130000,15600],
+  [140000,16800],[150000,18000],[160000,19200],[170000,20400],[180000,21600],
+  [190000,22800],[200000,24000],[210000,25200],[220000,26400],[230000,27600],
+  [240000,28800],[250000,30000],[260000,31200],[270000,32400],[280000,33600],
+  [290000,34800],[300000,36000],[310000,37200],[320000,38400],[330000,39600],
+  [340000,40800],[350000,42000],[360000,43200],[370000,44400],[380000,45600],
+  [390000,46800],[400000,48000],[410000,49200],[420000,50400],[430000,51600],
+  [440000,52800],[450000,54000],[460000,55200],[470000,56400],[480000,57560],
+  [490000,58800],[500000,60000],[540000,62800],[580000,65600],[600000,67000],
+  [640000,69800],[680000,72600],[700000,74000],[740000,76800],[780000,79600],
+  [800000,81000],[840000,83800],[880000,86600],[900000,88000],[940000,90800],
+  [980000,93600],[1000000,95000],[1040000,96200],[1080000,97400],[1100000,98000],
+  [1140000,99200],[1180000,100400],[1200000,101000],[1240000,102200],[1280000,103400],
+  [1300000,104000],[1340000,105200],[1380000,106400],[1400000,107000],[1440000,108200],
+  [1480000,109400],[1500000,110000],[1540000,111200],[1580000,112400],[1600000,113000],
+  [1640000,114200],[1680000,115400],[1700000,116000],[1740000,117200],[1780000,118400],
+  [1800000,119000],[1840000,120200],[1880000,121400],[1900000,122000],[1940000,123200],
+  [1980000,124400],[2000000,125000],[2040000,126200],[2080000,127400],[2100000,128000],
+  [2140000,129200],[2180000,130400],[2200000,131000],[2240000,132200],[2280000,133400],
+  [2300000,134000],[2340000,135200],[2380000,136400],[2400000,137000],[2440000,138200],
+  [2480000,139400],[2500000,140000],[2540000,141200],[2580000,141800],[2600000,142400],
+  [2620000,143000],[2640000,143600],[2660000,144200],[2680000,144800],[2700000,145400],
+  [2720000,146000],[2740000,146600],[2760000,147200],[2780000,147800],[2800000,148400],
+  [2820000,149000]
+];
+const CF_MAX_FEE = 150000;
+
+function cfGcd(a,b){ a=Math.round(a); b=Math.round(b); while(b){[a,b]=[b,a%b];} return a; }
+function cfRatio(fee, amt){
+  const g = cfGcd(fee, amt);
+  let r1 = Math.round(fee/g), r2 = Math.round(amt/g);
+  if(Math.max(r1,r2) > 50000){ const s=Math.max(r1,r2)/1000; return `${(r1/s).toFixed(1)}:${(r2/s).toFixed(0)}`; }
+  if(Math.max(r1,r2) > 5000){ const s=Math.max(r1,r2)/100; return `${(r1/s).toFixed(1)}:${(r2/s).toFixed(0)}`; }
+  return `${r1}:${r2}`;
+}
+
+function cfGetFee(amount){
+  if(amount <= 0) return {fee:0, pct:0, ratio:'0:0', capped:false};
+  if(amount > 2820000){
+    return {fee:CF_MAX_FEE, pct:+(CF_MAX_FEE/amount*100).toFixed(4), ratio:cfRatio(CF_MAX_FEE,amount), capped:true};
+  }
+  const exact = CF_TABLE.find(r=>r[0]===amount);
+  if(exact){ return {fee:exact[1], pct:+(exact[1]/amount*100).toFixed(4), ratio:cfRatio(exact[1],amount), capped:false}; }
+  for(let i=0;i<CF_TABLE.length-1;i++){
+    if(CF_TABLE[i][0]<amount && CF_TABLE[i+1][0]>amount){
+      const t=(amount-CF_TABLE[i][0])/(CF_TABLE[i+1][0]-CF_TABLE[i][0]);
+      const fee=Math.round(CF_TABLE[i][1]+t*(CF_TABLE[i+1][1]-CF_TABLE[i][1]));
+      return {fee, pct:+(fee/amount*100).toFixed(4), ratio:cfRatio(fee,amount), capped:false};
+    }
+  }
+  const fee=Math.round(amount*0.12);
+  return {fee, pct:12, ratio:cfRatio(fee,amount), capped:false};
+}
+
+function cfInr(n){ return '₹'+n.toLocaleString('en-IN'); }
+function cfWords(n){
+  if(n>=10000000) return `${(n/10000000).toFixed(2)} करोड़`;
+  if(n>=100000) return `${(n/100000).toFixed(2)} लाख`;
+  if(n>=1000) return `${(n/1000).toFixed(1)} हज़ार`;
+  return n+' रुपए';
+}
+
+function cfCalculate(){
+  const val = parseFloat(document.getElementById('cfAmtInput').value)||0;
+  const atxt = document.getElementById('cfAmtText');
+  atxt.textContent = val>0 ? `= ${cfInr(val)}  (${cfWords(val)})` : '';
+
+  if(val<=0){
+    document.getElementById('cfResultCard').classList.add('cf-hidden');
+    document.querySelectorAll('.cf-quick-btn').forEach(b=>b.classList.remove('active'));
+    return;
+  }
+
+  const r = cfGetFee(val);
+  document.getElementById('cfResultCard').classList.remove('cf-hidden');
+  document.getElementById('cfRFee').textContent = cfInr(r.fee);
+  document.getElementById('cfRPct').textContent = r.pct.toFixed(3)+'%';
+  document.getElementById('cfRRatio').textContent = r.ratio;
+  document.getElementById('cfBarPct').textContent = r.pct.toFixed(3)+'%';
+  document.getElementById('cfBarFill').style.width = Math.min(r.pct/15*100,100)+'%';
+  document.getElementById('cfBAmount').textContent = cfInr(val);
+  document.getElementById('cfBFee').textContent = cfInr(r.fee);
+  document.getElementById('cfBPct').textContent = r.pct.toFixed(4)+'%';
+  document.getElementById('cfBRatio').textContent = r.ratio;
+  document.getElementById('cfCapNotice').classList.toggle('cf-hidden', !r.capped);
+
+  document.querySelectorAll('.cf-quick-btn').forEach(b=>{
+    const onclick = b.getAttribute('onclick');
+    const match = onclick && onclick.match(/cfSetAmount\((\d+)\)/);
+    const bv = match ? parseInt(match[1]) : -1;
+    b.classList.toggle('active', bv===val);
+  });
+
+  if(!document.getElementById('cfTableWrap').classList.contains('cf-hidden')){
+    cfHighlightRow(val);
+  }
+}
+
+function cfSetAmount(v){
+  document.getElementById('cfAmtInput').value = v;
+  cfCalculate();
+}
+
+function cfToggleTable(){
+  const wrap = document.getElementById('cfTableWrap');
+  const btn = document.getElementById('cfToggleBtn');
+  const hidden = wrap.classList.toggle('cf-hidden');
+  btn.textContent = hidden ? '▼ पूरी शुल्क तालिका देखें — Full Fee Schedule' : '▲ तालिका छुपाएं — Hide Table';
+  if(!hidden && !document.getElementById('cfTableBody').hasChildNodes()){
+    cfBuildTable();
+  }
+  if(!hidden){
+    const val = parseFloat(document.getElementById('cfAmtInput').value)||0;
+    if(val>0) cfHighlightRow(val);
+  }
+}
+
+function cfBuildTable(){
+  const tbody = document.getElementById('cfTableBody');
+  CF_TABLE.forEach((row,i)=>{
+    const [amt,fee] = row;
+    const pct = (fee/amt*100).toFixed(3);
+    const rat = cfRatio(fee,amt);
+    const tr = document.createElement('tr');
+    tr.className = i%2===0?'cf-even':'';
+    tr.setAttribute('data-amt', amt);
+    tr.onclick = ()=>cfSetAmount(amt);
+    tr.innerHTML = `
+      <td class="cf-td-amount">${amt.toLocaleString('en-IN')}</td>
+      <td class="cf-td-fee">${fee.toLocaleString('en-IN')}</td>
+      <td><span class="cf-pct-badge">${pct}%</span></td>
+      <td class="cf-td-ratio">${rat}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+
+  const capTr = document.createElement('tr');
+  capTr.className = 'cf-table-footer';
+  capTr.innerHTML = `<td colspan="4">★ ₹28,20,000 से अधिक → अधिकतम शुल्क ₹1,50,000 (Maximum Cap)</td>`;
+  tbody.appendChild(capTr);
+}
+
+function cfHighlightRow(val){
+  document.querySelectorAll('#cfTableBody tr[data-amt]').forEach(tr=>{
+    tr.classList.remove('cf-highlighted');
+  });
+  let closest=null, minDiff=Infinity;
+  document.querySelectorAll('#cfTableBody tr[data-amt]').forEach(tr=>{
+    const d = Math.abs(parseInt(tr.getAttribute('data-amt'))-val);
+    if(d<minDiff){ minDiff=d; closest=tr; }
+  });
+  if(closest){ closest.classList.add('cf-highlighted'); closest.scrollIntoView({block:'nearest',behavior:'smooth'}); }
+}
+</script>
+</body>
+</html>
