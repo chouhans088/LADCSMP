@@ -519,63 +519,62 @@ All legal and defence policy chief legal aid defence counsel deputy legal aid de
 
 <!-- गूगल शीट से डेटा खींचने का ऑटोमैटिक कोड (JavaScript) -->
 <script>
-    // 1. यहाँ अपनी असली गूगल शीट की ID डालें
-    const sheetId = 'अपनी_GOOGLE_SHEET_ID_यहाँ_डालें'; 
-    const base = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:json`;
+    <script>
+// ==========================================
+// 🔴 आपकी असली गूगल शीट की ID यहाँ सेट है
+// ==========================================
+const sheetId = '1AMPH4jZfE843Ltv3o1W4CzqDdusv0vfe-l20iFaE36U'; 
+const base = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:json`;
 
-    // किताब को खोलने/बंद करने के लिए
-    function toggleLawBook() {
-        var book = document.getElementById("lawBook");
-        book.style.display = (book.style.display === "none" || book.style.display === "") ? "block" : "none";
+// किताब को खोलने/बंद करने के लिए फंक्शन
+function toggleLawBook() {
+    var book = document.getElementById("lawBook");
+    if (book.style.display === "none" || book.style.display === "") {
+        book.style.display = "block";
+    } else {
+        book.style.display = "none";
     }
+}
 
-    // गूगल शीट से न्यूज़ लोड करने का फंक्शन
-    document.addEventListener("DOMContentLoaded", function() {
-        fetch(base)
-            .then(res => res.text())
-            .then(data => {
-                // गूगल के एक्स्ट्रा टेक्स्ट को हटाकर शुद्ध JSON निकालना
-                const jsonData = JSON.parse(data.substring(47, data.length - 2));
-                const rows = jsonData.table.rows;
-                let html = "";
+// गूगल शीट से लाइव समाचार खींचने का फंक्शन
+document.addEventListener("DOMContentLoaded", function() {
+    fetch(base)
+        .then(res => res.text())
+        .then(data => {
+            const jsonData = JSON.parse(data.substring(47, data.length - 2));
+            const rows = jsonData.table.rows;
+            let html = "";
 
-                // पहली लाइन को छोड़कर बाकी सभी न्यूज़ लाइन्स को पढ़ना
+            if (!rows || rows.length === 0) {
+                html = `<div style="text-align:center;padding:20px;color:#9a7a50;">📰 अभी कोई समाचार उपलब्ध नहीं है।</div>`;
+            } else {
                 for (let i = 0; i < rows.length; i++) {
-                    const title = rows[i].c[0] ? rows[i].c[0].v : "बिना टाइटल की न्यूज़";
-                    const newsText = rows[i].c[1] ? rows[i].c[1].v : "कोई विवरण नहीं है।";
+                    const title = rows[i].c[0] ? rows[i].c[0].v : "मुख्य शीर्षक उपलब्ध नहीं है";
+                    const newsText = rows[i].c[1] ? rows[i].c[1].v : "समाचार का विवरण अभी उपलब्ध नहीं है।";
 
                     html += `
-                        <div class="news-item">
-                            <div class="news-title" onclick="toggleNewsContent(this)">
-                                <span>📘 ${title}</span>
-                                <span class="arrow">▼</span>
-                            </div>
-                            <div class="news-content">
-                                <p>${newsText}</p>
-                            </div>
+                        <div class="news-item" style="margin-bottom: 15px; padding: 10px; border-bottom: 1px dashed #c8a878;">
+                            <h4 style="color: #2c1810; margin-bottom: 5px; font-weight: bold;">📘 ${title}</h4>
+                            <p style="color: #2a1a0a; font-size: 14px; line-height: 1.6; text-align: justify; white-space: pre-line;">${newsText}</p>
                         </div>
                     `;
                 }
-                document.getElementById("newsContainer").innerHTML = html;
-            })
-            .catch(error => {
-                console.error(error);
-                document.getElementById("newsContainer").innerHTML = "<p style='color:red; text-align:center;'>न्यूज़ लोड करने में समस्या आई। कृपया शीट की एक्सेस सेटिंग चेक करें।</p>";
-            });
-    });
-
-    // खबर को विस्तार में खोलने के लिए
-    function toggleNewsContent(element) {
-        var item = element.parentElement;
-        var content = element.nextElementSibling;
-        
-        if (content.style.display === "block") {
-            content.style.display = "none";
-            item.classList.remove("active");
-        } else {
-            content.style.display = "block";
-            item.classList.add("active");
-        }
-    }
+            }
+            // पुराने डिब्बे (newsContainer) में लाइव न्यूज़ डालना
+            const container = document.getElementById("newsContainer") || document.getElementById("lawBook");
+            if(container) {
+                container.innerHTML = html;
+            }
+        })
+        .catch(error => {
+            console.error(error);
+            const container = document.getElementById("newsContainer") || document.getElementById("lawBook");
+            if(container) {
+                container.innerHTML = `
+                    <div style="text-align:center; padding:10px; color:red; font-size:13px; font-weight:bold;">
+                        ⚠️ न्यूज़ लोड करने में तकनीकी समस्या आई!
+                    </div>`;
+            }
+        });
+});
 </script>
-<!-- लॉ न्यूज़ सेक्शन की समाप्ति -->
