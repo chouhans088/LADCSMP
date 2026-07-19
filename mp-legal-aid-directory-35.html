@@ -3059,22 +3059,23 @@ function rdRenderJudge() {
     }
 </style>
 
-<!-- गूगल शीट से डेटा खींचने का ऑटोमैटिक कोड (JavaScript) -->
-<script>
-    // 1. यहाँ अपनी असली गूगल शीट की ID डालें
-    const sheetId = 'https://docs.google.com/document/d/1GSYpOGc1hRlWbb1pg-i-tOvfduab-XCzBx_xSBWR6vg/edit?usp=drivesdk'; 
-    const base = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:json`;
+// ==========================================
+// 🔴 आपकी असली गूगल शीट की ID यहाँ सेट है
+// ==========================================
+const sheetId = '1AMPH4jZfE843Ltv3o1W4CzqDdusv0vfe-l20iFaE36U'; 
+const base = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:json`;
 
-    // किताब को खोलने/बंद करने के लिए
-    function toggleLawBook() {
-        var book = document.getElementById("lawBook");
-        book.style.display = (book.style.display === "none" || book.style.display === "") ? "block" : "none";
+// लाल किताब को खोलने/बंद करने के लिए फंक्शन
+function toggleLawBook() {
+    var book = document.getElementById("lawBook");
+    if (book.style.display === "none" || book.style.display === "") {
+        book.style.display = "block";
+    } else {
+        book.style.display = "none";
     }
-// गूगल शीट से लाइव समाचार खींचने का फंक्शन
-document.addEventListener("DOMContentLoaded", function() {
-    const sheetId = '1AMPH4jZfE843Ltv3o1W4CzqDdusv0vfe-l20iFaE36U'; 
-    const base = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:json`;
+}
 
+document.addEventListener("DOMContentLoaded", function() {
     fetch(base)
         .then(res => res.text())
         .then(data => {
@@ -3087,16 +3088,15 @@ document.addEventListener("DOMContentLoaded", function() {
             } else {
                 for (let i = 0; i < rows.length; i++) {
                     const title = rows[i].c[0] ? rows[i].c[0].v : "मुख्य शीर्षक उपलब्ध नहीं है";
-                    const newsText = rows[i].c[1] ? rows[i].c[1].v : "समाचार का विवरण अभी उपलब्ध नहीं है।";
+                    const newsText = rows[i].c[1] ? rows[i].c[1].v : "";
 
                     html += `
-                        <div class="news-item" style="margin-bottom: 15px; padding: 10px; border-bottom: 1px dashed #c8a878;">
-                            <div class="news-title" onclick="toggleNewsContent(this)" style="cursor:pointer; font-weight:bold; color:#2c1810; display:flex; justify-content:between; align-items:center;">
-                                <span>📘 ${title}</span>
-                                <span class="arrow" style="margin-left:auto; transition:transform 0.3s;">▼</span>
+                        <div style="margin-bottom: 25px; padding-bottom: 20px; border-bottom: 1px dashed #c8a878; font-family: 'Noto Serif Devanagari', serif;">
+                            <div style="font-size: 18px; font-weight: 700; color: #1a0f08; line-height: 1.4; margin-bottom: 10px; border-bottom: 2px solid #5c3a1a; padding-bottom: 6px;">
+                                📰 ${title}
                             </div>
-                            <div class="news-content" style="display:none; margin-top:10px; color:#2a1a0a; font-size:14px; line-height:1.6; text-align:justify; white-space:pre-line;">
-                                <p>${newsText}</p>
+                            <div style="font-size: 14px; color: #2a1a0a; line-height: 1.8; text-align: justify; white-space: pre-line;">
+                                ${newsText}
                             </div>
                         </div>
                     `;
@@ -3107,27 +3107,14 @@ document.addEventListener("DOMContentLoaded", function() {
         .catch(error => {
             console.error(error);
             document.getElementById("newsContainer").innerHTML = `
-                <div style="text-align:center; padding:10px; color:red; font-size:13px; font-weight:bold;">
+                <div style="text-align:center; padding:15px; color:red; font-size:13px; font-weight:bold;">
                     ⚠️ न्यूज़ लोड करने में तकनीकी समस्या आई!
                 </div>`;
         });
 });
 
-// खबर को विस्तार में खोलने के लिए
-function toggleNewsContent(element) {
-    var content = element.nextElementSibling;
-    var arrow = element.querySelector('.arrow');
-    if (content.style.display === "block") {
-        content.style.display = "none";
-        if(arrow) arrow.style.transform = "rotate(0deg)";
-    } else {
-        content.style.display = "block";
-        if(arrow) arrow.style.transform = "rotate(180deg)";
-    }
-  }
-  
-    
-</script>
+});
+
 <!-- लॉ न्यूज़ सेक्शन की समाप्ति -->
 
 </body>
